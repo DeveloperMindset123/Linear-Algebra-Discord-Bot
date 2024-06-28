@@ -56,9 +56,6 @@ try {
   console.error(error);
 }
 
-// TODO : Remove later, this statement was just a test to check if environmental variables are being correctly printed out or not
-//console.log(process.env);
-
 const client = new Client({
   intents: [
     // NOTE : intent must be activated within the bot section of the application before they can be used.
@@ -69,7 +66,10 @@ const client = new Client({
   ],
 });
 
-//provide intents for the clinet
+/**
+ * @Reference https://discord.js.org/docs/packages/discord.js/main/Client:Class#ready
+ * @Usage Emitted when the client becomes ready to start working.
+ */
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
