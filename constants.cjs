@@ -1,3 +1,4 @@
+//TODO : convert to using export statement from module
 const lPrefix = "math";
 const uPrefix = "Math";
 const pi = Math.PI;

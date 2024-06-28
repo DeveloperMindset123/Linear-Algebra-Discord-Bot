@@ -1,3 +1,4 @@
+// TODO : convert to arrow functions instead and use module style export later in the development phase
 function add(a, b) {
   return Math.round((a + b) * 1000) / 1000;
 }
