@@ -5,7 +5,7 @@ import dotenv from "dotenv";
  * @Reference https://github.com/AnIdiotsGuide/discordjs-bot-guide/blob/master/other-guides/env-files.md
  * @Usage Importing this allows you to access the environment variables of the running node process
  * @Reference https://stackoverflow.com/questions/63863129/invalid-token-on-discord-js
- * @Reference
+ * @NOTE if new commands are added, refresh the page to ensure that it reloads
  */
 
 /**
@@ -26,10 +26,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// Think of this as metadata
 const commands = [
+  // you can define a series of commands to pass in
+
   {
     name: "ping",
     description: "Replies with Pong!",
+  },
+  {
+    name: "hola",
+    description: "Replies with Hello!",
   },
 ];
 
@@ -72,6 +79,18 @@ const client = new Client({
  */
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on("interactionCreate", async (interaction) => {
+  // consider this to be the terminating case
+  if (!interaction.isChatInputCommand()) return;
+  // use this as the template
+  if (interaction.commandName === "ping") {
+    // This is the message that will be displayed
+    await interaction.reply("Pong!");
+  } else if (interaction.commandName === "hola") {
+    await interaction.reply("Hello!");
+  }
 });
 
 //Here you can login the bot. It automatically attempts to login the bot using the environmental vairable set for the bot token
