@@ -163,3 +163,74 @@ trapezoid (\`trapeze\`)
 rhombus (\`diamond\`)
 `
 );
+
+const al = new EmbedBuilder();
+al.setTitle("List of figures whose area can be calculated");
+al.setColor("D2691E");
+al.setAuthor("Ayan Das");
+al.setDescription(`The figures whose area can be calculated are:
+square (\`square\`)
+rectangle (\`rectangle\`)
+disk (\`disk\`)
+parallelogram (\`parallelogram\` | \`para\`)
+triangle (\`triangle\`)
+trapezoid (\`trapeze\`)
+rhombus (\`diamond\`)
+sphere (\`sphere\`)
+cone (\`cone\`)
+cube (\`cube\`)
+right pad (\`r_c\` | \`rectangleCuboid\`)
+cylinder (\`cylinder\`)
+pyramid with square base (\`pyramid_s\`)
+`);
+
+const vl = new EmbedBuilder();
+vl.setTitle("List of figures whose volume can be calculated");
+vl.setColor("D2691E");
+vl.setAuthor("Ayan Das");
+vl.setDescription(`The figures whose volume can be calculated are:
+cube (\`cube\`)
+right pad (\`r_c\` | \`rectangleCuboid\`)
+cylinder (\`cylinder\`)
+cone (\`cone\`)
+pyramid with square base (\`pyramid_s\`)
+pyramid with rectangle base (\`pyramid_r\`)
+sphere (\`sphere\`)
+`);
+
+const tl = new EmbedBuilder();
+tl.setTitle("List of applicable theorems");
+tl.setColor("D2691E");
+tl.setAuthor("Ayan Das");
+tl.setDescription(`The applicable theorems are:
+    the Pythagorean theorem (calculation of hypotenuse (\`pythagoreHypothenuse\` | \`pH\`) and calculation of the other side (\`pythagoreOtherSide\` | \`pOS\`))
+
+    Thales' theorem (calculation when we know a fraction and a numerator (\`thalesWithUnknownDenominator\` | \`tWUD\`) **or** a denominator
+    *\`thalesWithUnknownNumerator\` | \`tWUN\`))
+
+    the converse of the Pythagorean theorem (returns true if the 2 squared sides added are equal to the square of the other side (\`inverseOfPythogorasTheorem\` | \`iOPT\`))`);
+
+/* The part below shouldn't be neccesary
+const invite = new EmbedBuilder();
+invite.setTitle("Bot invitation, test server and Github");
+invite.setColor("FF7F50");
+invite.setDescription("", true); */
+
+module.exports = {
+  help: help,
+  calcHelp: calcHelp,
+  perimeterHelp: perimeterHelp,
+  areahelp: areahelp,
+  volumeHelp: volumeHelp,
+  theoremHelp: theoremHelp,
+  // perimeter list
+  pl: pl,
+  // area list
+  al: al,
+  // volume list
+  vl: vl,
+  // theorem list
+  tl: tl,
+  // TODO : Check into this later -> this added addicitonal configurations for how the invite should look, at the moment I left it as a comment instead
+  //invite : invite
+};
