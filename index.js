@@ -25,4 +25,4 @@ client.on("ready", () => {
 });
 
 //Here you can login the bot. It automatically attempts to login the bot using the environmental vairable set for the bot token
-client.login('MTI1NjI3MTQ5Njk1NTgyMjExMg.GYIwSI.awNp8STi794liV6e2GjRK5VFEVL-CdwOFD6acs');
+client.login(`${process.env.CLIENT_TOKEN}`);
