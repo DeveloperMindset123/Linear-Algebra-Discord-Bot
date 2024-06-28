@@ -1,0 +1,15 @@
+{
+  "name": "linear-algebra-discord-bot",
+  "version": "0.0.5",
+  "description": "This is a linear algebra discord bot used as a personalized tutor to encourage simplified learning.",
+  "main": "index.js",
+  "repository": "https://github.com/DeveloperMindset123/Linear-Algebra-Discord-Bot.git",
+  "author": "Ayan Das",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/voice": "^0.17.0",
+    "bufferutil": "^4.0.8",
+    "discord.js": "^14.15.3",
+    "utf-8-validate": "^6.0.4"
+  }
+}
