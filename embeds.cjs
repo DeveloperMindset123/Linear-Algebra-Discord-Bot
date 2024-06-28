@@ -73,6 +73,7 @@ perimeterHelp.addFields("Alias:", "p");
 
 //add embedding for the area function found within areaFunctions.js
 const areahelp = new EmbedBuilder();
+areahelp.setTitle(`Help for the command \`area\``);
 areahelp.setColor("00FFF");
 areahelp.setAuthor("Ayan Das");
 areahelp.setDescription(
@@ -96,3 +97,69 @@ areahelp.addFields(
 `
 );
 areahelp.addFields("Alias:", "a");
+
+//add embedding for the volume function
+const volumeHelp = new EmbedBuilder();
+volumeHelp.setTitle(`Help for the command \`volume\``);
+volumeHelp.setColor("00FFF");
+volumeHelp.setAuthor("Ayan Das");
+volumeHelp.setDescription(
+  `**REMEMBER**: [arguments] are _mandatory_ while <arguments> are not.`
+);
+volumeHelp.addFields(
+  "What is it for?",
+  "This command is used to calculate the volume of many figures (`$vl`)"
+);
+volumeHelp.addFields(
+  "How do we use it? (let n be the number of measurements)",
+  `This command is used as follows: \`$volume [figure] n[measure]\``
+);
+volumeHelp.addFields(
+  "Examples:",
+  `
+\`$cubic volume 5\` → volume of a square → 125
+\`$rectangle volume Cuboid 8 6 5\` → volume of a rectangle → 240
+`
+);
+volumeHelp.addFields("Alias:", "v");
+
+const theoremHelp = new EmbedBuilder();
+theoremHelp.setTitle(`Help for the command \`theorem\``);
+theoremHelp.setColor("00FFF");
+theoremHelp.setAuthor("Ayan Das");
+theoremHelp.setDescription(
+  `**REMEMBER**: [arguments] are _mandatory_ while <arguments> are not.`
+);
+theoremHelp.addFields(
+  "What is it for?",
+  "This command is used to perform some theorems (`$theoremsList`)"
+);
+theoremHelp.addFields(
+  "How do we use it? (let n be the number of measures)",
+  `This command is used as follows: \`$theorem [theorem] n[measure]\``
+);
+theoremHelp.addFields(
+  "Examples:",
+  `
+\`$Pythagorean theorem Hypotenuse 5 5\` → hypotenuse calculation → 7 (approximately)
+\`$pythagorean theorem OtherSide 8 6\` → calculus on the other side → 5 (approximately)
+`
+);
+theoremHelp.addFields("Alias:", "t");
+
+// add embedding support for perimeter lists
+const pl = new EmbedBuilder();
+pl.setTitle("List of figures whose perimeter can be calculated");
+pl.setColor("D2691E");
+pl.setAuthor("Ayan Das");
+pl.setDescription(
+  `The figures whose perimeter can be calculated are:
+square (\`square\`)
+rectangle (\`rectangle\`)
+circle (\`circle\`)
+triangle (\`triangle\`)
+parallelogram (\`parallelogram\` | \`para\`)
+trapezoid (\`trapeze\`)
+rhombus (\`diamond\`)
+`
+);
