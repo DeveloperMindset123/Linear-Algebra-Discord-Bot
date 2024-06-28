@@ -6,6 +6,7 @@
   "repository": "https://github.com/DeveloperMindset123/Linear-Algebra-Discord-Bot.git",
   "author": "Ayan Das",
   "license": "MIT",
+  "module": "module",
   "dependencies": {
     "@discordjs/voice": "^0.17.0",
     "bufferutil": "^4.0.8",
