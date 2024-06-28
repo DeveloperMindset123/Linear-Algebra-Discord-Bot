@@ -1,6 +1,15 @@
 import { Client, GatewayIntentBits, REST, Routes } from "discord.js";
+import chalk from "chalk";
 import dotenv from "dotenv";
 import { squarePerimeter } from "./perimeter";
+import embeds from "./embeds.cjs";
+import * as basicArithmetics from "./basicArithmetics.cjs";
+import * as perimeterFunctions from "./perimeter.js";
+//import * as areaFunctions from """ --> area functions needs to be defined
+import * as volumeFunctions from "./volumeFunctions.js";
+import * as theoremFunctions from "./theoremFunctions.js";
+import * as constants from "./constants.js";
+//import * as errorFunctions from "./"
 
 /**
  * @Reference https://github.com/AnIdiotsGuide/discordjs-bot-guide/blob/master/other-guides/env-files.md
