@@ -1,5 +1,6 @@
 import { Client, GatewayIntentBits, REST, Routes } from "discord.js";
 import dotenv from "dotenv";
+import { squarePerimeter } from "./perimeter";
 
 /**
  * @Reference https://github.com/AnIdiotsGuide/discordjs-bot-guide/blob/master/other-guides/env-files.md

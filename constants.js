@@ -7,12 +7,4 @@ const squareRoot = "\u221a";
 const times = "\u00d7";
 const up3 = "\u00b3";
 
-module.exports = {
-  lPrefix: lPrefix,
-  uPrefix: uPrefix,
-  pi: pi,
-  lPi: lPi,
-  squareRoot: squareRoot,
-  times: times,
-  up3: up3,
-};
+export { lPrefix, uPrefix, pi, lPi, squareRoot, times, up3 };
