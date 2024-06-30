@@ -88,6 +88,10 @@ const client = new Client({
  * @Usage Emitted when the client becomes ready to start working.
  */
 client.on("ready", () => {
+  console.log(chalk.yellow(`I'm ready !`));
+  client.user.setActivity(
+    `prefixe: ${constants.lPrefix} | ${constants.lPrefix} help`
+  );
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
