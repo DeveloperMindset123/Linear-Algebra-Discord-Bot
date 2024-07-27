@@ -19,7 +19,8 @@ const {
 const chalk = "chalk";
 const dotenv = require("dotenv");
 const math = require("mathjs");
-const eventHandler = require("./src/events/handlers/eventHandler");
+// This was causing errors
+const eventHandler = require("../src/handlers/eventHandler");
 
 dotenv.config();
 

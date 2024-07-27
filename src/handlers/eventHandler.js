@@ -3,8 +3,11 @@
  */
 
 const { eventNames } = require("process");
-const getAllFiles = require("../../utils/getAllFiles");
+const getAllFiles = require("../utils/getAllFiles");
 const path = require("path");
+const chalk = require("chalk");
+
+// TODO : clear out all the content for eventHandler.js
 
 // This should take in client as a parameter, we are defining an annoynomous function in this case --> similar to a lambda function
 module.exports = (client) => {
@@ -16,18 +19,21 @@ module.exports = (client) => {
    */
   const eventFolders = getAllFiles(
     // FIX : needed to add one more layer to the file path so it reads everything as intended
-    path.join(__dirname, "../..", "events"),
+    path.join(__dirname, "..", "events"),
     true
   );
-  console.log(__dirname);
+  console.log(
+    chalk.cyanBright("Name of the directory (in an array format):", __dirname)
+  );
 
   // NOTE : it's only printing out one file for me
-  console.log(eventFolders);
+  //console.log(eventFolders);
 
   // OBSERVE : this is a nested for loop statement taking place
   for (const eventFolder of eventFolders) {
     // this will save the files as well
     const eventFiles = getAllFiles(eventFolder);
+    eventFiles.sort((a, b) => a > b);
     // TODO : Remove later --> uncomment the comment below to see the resulting output as needed.
     //console.log(eventFiles);
 
@@ -35,6 +41,7 @@ module.exports = (client) => {
     // First parameter specifies the regex we are searching for, whcih in this case is backslashes
     // The second parameter specifies what the regex values should be replaced with, whcih is forward slashes --> TLDR : replacing backslashes with forward slashes for organizaation using regex
     // pop is essentially the last element of an array, whcih is the name of the folder.
+    // This will ensure that both operating systems remains consistent with the file pathing
     const eventName = eventFolder.replace(/\\/g, "/").split("/").pop();
 
     //define the event Listener
@@ -46,7 +53,7 @@ module.exports = (client) => {
         await eventFunction(client, arg);
       }
     });
-    console.log(eventName);
+    //console.log(eventName);
   }
 };
 

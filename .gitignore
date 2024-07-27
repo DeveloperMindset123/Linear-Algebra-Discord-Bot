@@ -3,3 +3,4 @@ yarn.lock
 node_modules
 node_modules_old
 .env
+config.json
