@@ -231,6 +231,4 @@ module.exports = {
   vl: vl,
   // theorem list
   tl: tl,
-  // TODO : Check into this later -> this added addicitonal configurations for how the invite should look, at the moment I left it as a comment instead
-  //invite : invite
 };

@@ -27,6 +27,7 @@ const sphereVolume = (radius) => {
   return Math.round((4.0 / 3.0) * pi * Math.pow(radius, 3) * 1000) / 1000;
 };
 
+/*
 export {
   cubeVolume,
   rectangleCuboidVolume,
@@ -36,3 +37,4 @@ export {
   rectangleBasedPyramidVolume,
   sphereVolume,
 };
+*/
