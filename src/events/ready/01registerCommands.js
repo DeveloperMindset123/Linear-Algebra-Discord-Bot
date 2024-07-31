@@ -13,15 +13,24 @@ module.exports = async (client) => {
   // The below function call has been transferred to a try and catch block, since it's not always guranteed that the command will be registered
   //const localCommands = getLocalCommands();
   // print out to see the files that are being registered, should be the directory within the commands directory
-  // TODO : Remove the console.log statement later, it may not even be nneccessary to begin with
-  console.log(
-    chalk.blueBright("Commands Directory content (Folders only)", localCommands)
-  );
+
   // HINT : typing trycatch together and pressing enter will automatically create and format a skeletal try and catch block ready for use
   try {
     const localCommands = getLocalCommands();
     // NOTE : the testServer in this case is the guildID
-    const applicationCommands = getApplicationCommands(client, testServer);
+    // NOTE : We must add await to the getApplicationCommands method since we defined it as an async function (additionally, await can only be used for async functions)
+
+    // TODO : Remove the console.log statement later, it may not even be nneccessary to begin with
+    console.log(
+      chalk.blueBright(
+        "Commands Directory content (Folders only)",
+        localCommands
+      )
+    );
+    const applicationCommands = await getApplicationCommands(
+      client,
+      testServer
+    );
 
     for (const localCommand of localCommands) {
       const { name, description, options } = localCommand;
@@ -33,7 +42,7 @@ module.exports = async (client) => {
       if (existingCommand) {
         if (localCommand.deleted) {
           await applicationCommands.delete(existingCommand.id);
-          console.log(`Deleted Command "${name}"`);
+          console.log(`🗑️ Deleted Command "${name}"`);
         }
 
         // check if the commands we are working with are different or not
@@ -45,6 +54,21 @@ module.exports = async (client) => {
 
           console.log(`🀏 Edited command "${name}".`);
         }
+      } else {
+        if (localCommand.deleted) {
+          console.log(
+            `⏩ Skipping registering command "${name}" as it's set to delete.`
+          );
+          continue;
+        }
+
+        await applicationCommands.create({
+          name,
+          description,
+          options,
+        });
+
+        console.log("👍 Successfully registered command!");
       }
     }
   } catch (error) {
