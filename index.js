@@ -7,7 +7,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
-const { token } = require("../config.json");
+const { token } = require("./config.json");
 
 // create a new client instance
 // The GatewayIntentBits.Guilds intents option is neccessary for the discord.js client to work as you expect it to, as it ensures that the cahces for guilds, channels and roles are populated and ready for internal use --> guild refers to discord servers
@@ -38,7 +38,7 @@ for (const folder of commandFolders) {
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath);
-    // set a new item in the collection with the key as the command name and the value as the exported module
+    // Set a new item in the Collection with the key as the command name and the value as the exported module
     if ("data" in command && "execute" in command) {
       client.commands.set(command.data.name, command);
     } else {
@@ -48,5 +48,15 @@ for (const folder of commandFolders) {
     }
   }
 }
+
+client.on(Events.InteractionCreate, (customInteraction) => {
+  /**
+   * @Purpose Not every interaction is a slash command (e.g. MessageComponent interactions).
+   * @Detail Make sure we are only handling slash commands in this function, this the added conditional statement prior to console.log
+   * @Detail This method also provides typegruarding
+   */
+  if (!customInteraction.isChatInputCommand()) return;
+  console.log(customInteraction);
+});
 
 // cotinue --> https://discordjs.guide/creating-your-bot/command-handling.html#loading-command-files
