@@ -3,6 +3,7 @@
  * @Reference https://discordjs.guide/creating-your-bot/command-deployment.html#guild-commands
  * @Detail The above link contains more up-to-date description of how to go about defining commands, as well as registering those sepcific commands.
  *  */
+/*
 const chalk = require("chalk");
 const { testServer, devs } = require("../../../config.json");
 const getLocalCommands = require("../../utils/getLocalCommands");
@@ -75,4 +76,4 @@ module.exports = async (client) => {
     // provide the error that occured in the form of a console.log statement
     console.log(`There was an error: ${error}`);
   }
-};
+}; */

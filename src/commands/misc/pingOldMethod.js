@@ -1,5 +1,6 @@
 // define the default ping command, we are organizing the commands based on the folders, with the commands directory/folder containing the list of all the commands that the bot should contain
 
+/* --> old code for creating commands in individual command files
 module.exports = {
   // we are defining a simple object to specify the name of the command and what it does, in this case, the ping command.
   name: "ping",
@@ -16,3 +17,4 @@ module.exports = {
     interaction.reply(`Pong! ${client.ws.ping}ms`);
   },
 };
+*/

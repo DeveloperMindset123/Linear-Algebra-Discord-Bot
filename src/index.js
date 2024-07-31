@@ -1,8 +1,19 @@
-const { Client, Events, GateawayIntentBits } = require("discord.js");
+/**
+ * @fs module is Node's native file system module. fs is used to read the commands directory and identify our command files
+ * @path module is Node's native path utillity modile. path helps construct paths to access files and directories. One of the advantages of the path module is that it automatically detects the operating system that uses the appropriate joiners.
+ * @Collection class extends javascript's native Map class, and includes more extensive, useful funcitonality. Collection is used to store and efficiently retrieve commands for execution.
+ */
+
+const fs = require("node:fs");
+const path = require("node:path");
+const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
 const { token } = require("../config.json");
 
 // create a new client instance
-const client = new Client({ intents: [GateawayIntentBits.Guilds] });
+// The GatewayIntentBits.Guilds intents option is neccessary for the discord.js client to work as you expect it to, as it ensures that the cahces for guilds, channels and roles are populated and ready for internal use --> guild refers to discord servers
+
+// TODO : Don't delete, wrap this in JSDOC format later --> (link points to the guide for the discord guide) --> https://discordjs.guide/popular-topics/intents.html#privileged-intents
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // when the client is ready, run this code (only once)
 // The distinction between `client : Client<boolean> and `readyClient : Client<true>` is important for development in typescript
@@ -10,72 +21,32 @@ const client = new Client({ intents: [GateawayIntentBits.Guilds] });
 client.once(Events.ClientReady, (readyClient) => {
   console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
-
 // log into discord using your client's token
 client.login(token);
 
-/* Note that the following are old code, not part of the guide, so I am keeping it commented out for now
-// Take notes that this is how destructured imports work on discord.js
-const {
-  Client,
-  GatewayIntentBits,
-  SlashCommandBuilder,
-  // If this isnt imported, it will also throw an error
-  Routes,
-} = require("discord.js");
-const dotenv = require("dotenv");
-const math = require("mathjs");
-// This was causing errors
-const eventHandler = require("../src/handlers/eventHandler");
+// The command files that has been created within commands/utillity
+client.commands = new Collection();
 
-dotenv.config();
+const foldersPath = path.join(__dirname, "commands");
+const commandFolders = fs.readdirSync(foldersPath);
 
-// Think of this as metadata
-const commands = [
-  {
-    name: "ping",
-    description: "Replies with Pong!",
-  },
-  {
-    name: "hola",
-    description: "Replies with Hello!",
-  },
-  {
-    name: "add",
-    description: "adds a number of values together",
-  },
-];
-
-const rest = new discord.REST({ version: "10" }).setToken(
-  `${process.env.CLIENT_TOKEN}`
-);
-
-try {
-  console.log("Started refreshing application (/) commands.");
-
-  rest.put(
-    Routes.applicationCommands(
-      // The client ID being passed in should be the OAuth2 section
-      `${process.env.CLIENT_ID}`
-    ),
-    {
-      body: commands,
+for (const folder of commandFolders) {
+  const commandsPath = path.join(foldersPath, folder);
+  const commandFiles = fs
+    .readdirSync(commandsPath)
+    .filter((file) => file.endsWith(".js"));
+  for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file);
+    const command = require(filePath);
+    // set a new item in the collection with the key as the command name and the value as the exported module
+    if ("data" in command && "execute" in command) {
+      client.commands.set(command.data.name, command);
+    } else {
+      console.log(
+        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+      );
     }
-  );
-
-  console.log("Successfully reloaded application (/) commands.");
-} catch (error) {
-  console.error(error);
+  }
 }
 
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.MessageContent,
-  ],
-});
-
-eventHandler(client);
-client.login(`${process.env.CLIENT_TOKEN}`); */
+// cotinue --> https://discordjs.guide/creating-your-bot/command-handling.html#loading-command-files
