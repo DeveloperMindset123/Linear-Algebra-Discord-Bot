@@ -49,14 +49,38 @@ for (const folder of commandFolders) {
   }
 }
 
-client.on(Events.InteractionCreate, (customInteraction) => {
-  /**
-   * @Purpose Not every interaction is a slash command (e.g. MessageComponent interactions).
-   * @Detail Make sure we are only handling slash commands in this function, this the added conditional statement prior to console.log
-   * @Detail This method also provides typegruarding
-   */
-  if (!customInteraction.isChatInputCommand()) return;
-  console.log(customInteraction);
+// TODO : remove later for organization
+// HINT : matching commands can be found through the execution of the following --> client.commands. Collection based on the interaction.commandName.
+// your client instance is always available via interaction.client. If not matching command is found, log an error to the console and ignore the event
+
+// with the right command identified, all that's left to do is to call the command's execute() method and pass in the interaction variable as it's argument --> in the case of an error, you can wlays console.log the error message
+
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  const command = interaction.client.commands.get(interaction.commandName);
+
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp({
+        content: "There was an error while executing this command!",
+        ephemeral: true,
+      });
+    } else {
+      await interaction.reply({
+        content: "There was an error while executing this command!",
+        ephemeral: true,
+      });
+    }
+  }
 });
 
 // cotinue --> https://discordjs.guide/creating-your-bot/command-handling.html#loading-command-files

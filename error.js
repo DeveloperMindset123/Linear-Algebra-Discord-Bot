@@ -1,3 +1,4 @@
+/*
 import { EmbedBuilder } from "discord.js";
 
 const numberOfParamError = (expectedNumber) => {
@@ -38,3 +39,5 @@ const divisionByZeroError = () => {
   //TODO : Continue implementation here
   embed.setDescription(`:x: `);
 };
+
+*/

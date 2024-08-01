@@ -6,7 +6,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
  * @Purpose Guide to show how embedBuilder works
  * @Details This format of defining commands is more upto date with the guide that has been provided for writting custom commands, and allows for further customization.
  */
-/*
+
 const {
   PermissionsBitField,
   EmbedBuilder,

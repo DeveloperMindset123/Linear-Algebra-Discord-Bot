@@ -1,3 +1,5 @@
+/*
+
 const pythagoreOtherSide = (hypotenuse, knownSide) => {
   return (
     Math.round(
@@ -45,3 +47,4 @@ export {
   thalesWithUnknownDenominator,
   thalesWithUnknownNumerator,
 };
+*/
