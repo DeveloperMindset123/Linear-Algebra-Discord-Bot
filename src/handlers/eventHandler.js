@@ -2,6 +2,7 @@
  * @Purpose This file will be used to handle all our events within the events folder.
  */
 
+/*
 const { eventNames } = require("process");
 const getAllFiles = require("../utils/getAllFiles");
 const path = require("path");
@@ -17,6 +18,7 @@ module.exports = (client) => {
    * @Usage The path.join() method is used to join a number of path segments using the platform-specific delimter to form a single path. The final path is normalized after the joining takes place.
    * @Parameters directory : takes in the directory that has been specified and combines it with any appended files/folders as needed.
    */
+/*
   const eventFolders = getAllFiles(
     // FIX : needed to add one more layer to the file path so it reads everything as intended
     path.join(__dirname, "..", "events"),
@@ -58,3 +60,5 @@ module.exports = (client) => {
 };
 
 // link https://www.youtube.com/watch?v=JEEcbVjLyr0&t=124s
+
+*/

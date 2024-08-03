@@ -1,3 +1,4 @@
+/*
 //TODO : convert to using export statement from module
 const lPrefix = "math";
 const uPrefix = "Math";
@@ -8,3 +9,4 @@ const times = "\u00d7";
 const up3 = "\u00b3";
 
 export { lPrefix, uPrefix, pi, lPi, squareRoot, times, up3 };
+*/
