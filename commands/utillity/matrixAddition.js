@@ -41,22 +41,21 @@ module.exports = {
       // extract the provided matrix and convert them into numbers
       const matrix1 = interaction.options.get("matrix1");
       const matrix2 = interaction.options.get("matrix2");
-      const matrix1copy = Array.from(parseInt(matrix1.value));
-      const matrix2copy = parseInt(matrix2.value);
 
       // convert the retrieved array of numbers into matrix and add them together
-      //const matrix1Converted = math.matrix(matrix1copy);
-      //const matrix2Converted = math.matrix(matrix2copy);
+      // NOTE : I expect this to crash to be fair
+      const matrix1Converted = math.matrix(JSON.parse(matrix1.value));
+      const matrix2Converted = math.matrix(JSON.parse(matrix2.value));
+      // add the newly converted matrix
+      const addedMatrix = math.add(matrix1Converted, matrix2Converted);
 
-      console.log(`The values are ${matrix1.value} and ${matrix2.value}`);
+      // NOTE : it appears that the values are being treated as an objecthere
+      console.log(
+        `The values are ${matrix1.value} and ${matrix2.value} and the resulting addition is ${addedMatrix}`
+      );
       console.log(
         `The types for the math converted matrix is ${typeof matrix1.value} and ${typeof matrix2.value}`
       );
-
-      console.log(`matrix1copy's values are : ${matrix1copy}`);
-
-      // add the newly converted matrix
-      //const addedMatrix = math.add(matrix1Converted, matrix2Converted);
 
       /*
       console.log(
@@ -74,7 +73,7 @@ module.exports = {
       ); */
       // NOTE : the properties of the object are the following --> "name", "type", "value"
       await interaction.editReply({
-        content: `End of successful execution!`,
+        content: `End of successful execution! Resulting matrix value being ${addedMatrix}`,
       });
       // end the code ex
       return;
