@@ -2,15 +2,15 @@
 
 const { SlashCommandBuilder } = require("discord.js");
 const math = require("mathjs");
-const { execute } = require("./ping");
 
 module.exports = {
+  // NOTE : the cooldown part is optional, it is to reduce the commands from being spammed, which in turn can crash the server
   cooldown: 5,
   // implement the configurations that will be needed for matrix additon
   data: new SlashCommandBuilder()
     // NOTE : no upper case values allowed when naming command, or will cause errors
     .setName("matrix-addition")
-    .setDescription("Adds two matrix of equal sizes together")
+    .setDescription("Adds two matrix of equal dimensionality together")
     // Add the option to allow for matrix additions --> first option is for matrix 1
     // NOTE : number option won't work here, add a string option, and convert the string into a array of numbers thorugh removing the double quotes using regex logic
     .addStringOption((option) =>
@@ -37,6 +37,8 @@ module.exports = {
         `The options that are available for retrieval are ${interaction.options}`
       );
       await interaction.deferReply({ ephemeral: true });
+      // TODO : It's functional, but requires some cleanup, also the resulting reply should be an embedding instead
+      // TODO : Provide steps for how matrix addition is done, as well as reference links for people to look into for an in-depth explanation, simplest thing would be to provide an explanation and link reference links to show how the calculations are done in an official website
 
       // extract the provided matrix and convert them into numbers
       const matrix1 = interaction.options.get("matrix1");
