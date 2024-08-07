@@ -19,6 +19,7 @@ module.exports = {
         .setDescription(
           "Please provide the values of the matrix in an array format"
         )
+        .setRequired(true)
     )
     // add the option for the second matrix
     .addStringOption((option) =>
@@ -27,16 +28,37 @@ module.exports = {
         .setDescription(
           "Please provide the values of the matrix in an array format"
         )
+        .setRequired(true)
     ),
   execute: async function (interaction) {
     try {
+      // TODO : Remove the console.log statements later, or comment them out and remove them prior to production, as these are just here to better understand the logic that needs to be implemented.
       console.log(
         `The options that are available for retrieval are ${interaction.options}`
       );
       await interaction.deferReply({ ephemeral: true });
-      const Matrix1Values = interaction.options.get("matrix1");
-      const Matrix2Values = interaction.options.get("matrix2");
 
+      // extract the provided matrix and convert them into numbers
+      const matrix1 = interaction.options.get("matrix1");
+      const matrix2 = interaction.options.get("matrix2");
+      const matrix1copy = Array.from(parseInt(matrix1.value));
+      const matrix2copy = parseInt(matrix2.value);
+
+      // convert the retrieved array of numbers into matrix and add them together
+      //const matrix1Converted = math.matrix(matrix1copy);
+      //const matrix2Converted = math.matrix(matrix2copy);
+
+      console.log(`The values are ${matrix1.value} and ${matrix2.value}`);
+      console.log(
+        `The types for the math converted matrix is ${typeof matrix1.value} and ${typeof matrix2.value}`
+      );
+
+      console.log(`matrix1copy's values are : ${matrix1copy}`);
+
+      // add the newly converted matrix
+      //const addedMatrix = math.add(matrix1Converted, matrix2Converted);
+
+      /*
       console.log(
         `The values of matrix 1 is: ${JSON.stringify(
           Matrix1Values
@@ -49,20 +71,17 @@ module.exports = {
       );
       console.log(
         `Testing to see if matrix 1's value gets rendered or not ${Matrix1Values.value}`
-      );
+      ); */
       // NOTE : the properties of the object are the following --> "name", "type", "value"
-      interaction.editReply({
-        content:
-          `End of successful execution! The options that were provided are ${JSON.stringify(
-            Matrix1Values
-          )} and ${JSON.stringify(Matrix2Values)}` + `${Matrix1Values.value}`,
+      await interaction.editReply({
+        content: `End of successful execution!`,
       });
       // end the code ex
       return;
     } catch (error) {
       console.log(`Error executing the command ${error}`);
       // editReply should take in an object
-      interaction.editReply({
+      await interaction.editReply({
         content: "There was an error in executing the command",
       });
       return;
