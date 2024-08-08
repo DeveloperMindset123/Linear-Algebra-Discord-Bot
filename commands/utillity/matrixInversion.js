@@ -4,7 +4,6 @@
  */
 const { SlashCommandBuilder } = require("discord.js");
 const math = require("mathjs");
-const { execute } = require("./inviteCreate");
 
 module.exports = {
   // two components (required) --> data and execute
