@@ -48,9 +48,11 @@ module.exports = {
               ).eigenvectors[iterator]
             )[iterator]
           )[0];
+          console.log(`Current Eigenvectors ${correspondingEigenvectors}`);
           eigenvectors.push(correspondingEigenvectors);
           iterator++;
         }
+
         return eigenvectors;
       };
 
