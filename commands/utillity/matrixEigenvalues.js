@@ -3,15 +3,13 @@ const math = require("mathjs");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("eigen")
-    .setDescription(
-      "calculates the eigenvalues and the corresponding eigenctors given a matrix"
-    )
+    .setName("get-eigenvalues")
+    .setDescription("calculates the eigenvalues of a matrix")
     .addStringOption((option) =>
       option
         .setName("matrix")
         .setDescription(
-          "provide the matrix of which you want to calculate the eigenvalues and eigenctors of"
+          "provide the matrix of which you want to calculate the eigenvalues of"
         )
         .setRequired(true)
     ),
@@ -25,14 +23,18 @@ module.exports = {
         JSON.parse(interaction.options.get("matrix").value)
       );
       const result = math.eigs(matrix);
-      // This will retrieve the length fo eigenvalues --> we can get the eigenvalues in an array formating using the following code:
-      // Object.values(result.values)[0]; instead
-      const eigenvalues = Object.values(result.values)[0];
+      const eigenvalues = Object.values(result.values);
       // we can use this as a while loop to loop thoguh to determine the objects
+      console.log(`The resulting object is ${JSON.stringify(result)}`);
+      await interaction.editReply({
+        content: `The eigenvalues are ${result.values}`,
+      });
+
+      /*
       const numberOfEigenvalues = Object.values(result.values)[1][0];
       // TODO : this is a test, it should be printing out the vectors corresponding to the second eigenvalue in this case
       const eigenvectors = result.eigenvectors;
-      const singleEigenvector = eigenvectors[1];
+      
 
       // define a function that will be used to print out the eigenvectors and save them in an array, which will then be called when this command is executed
 
@@ -76,7 +78,7 @@ module.exports = {
       );
       await interaction.editReply({
         content: `End of successful execution!`,
-      });
+      }); */
     } catch (error) {
       console.log(`The execution failed due to ${error}`);
       await interaction.editReply({
