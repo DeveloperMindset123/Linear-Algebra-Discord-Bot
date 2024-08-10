@@ -116,6 +116,7 @@ for (const file of eventFiles) {
  * @Reference https://stackoverflow.com/questions/69790469/discord-js-interactioncreate-and-messagecreate
  */
 
+/* --> have been imported within the events directory instead, if the code below gets uncommented, it will execute twice instead of once
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
@@ -155,5 +156,5 @@ client.once(Events.ClientReady, (readyClient) => {
 });
 // cotinue --> https://discordjs.guide/creating-your-bot/event-handling.html#individual-event-files
 
-// This line should be executed at the end of the file.
+// This line should be executed at the end of the file. */
 client.login(token);
