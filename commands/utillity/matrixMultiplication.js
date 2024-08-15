@@ -32,8 +32,8 @@ module.exports = {
         ephemeral: true,
       });
 
-      const matrix1 = interaction.options.get("matrix1");
-      const matrix2 = interaction.options.get("matrix2");
+      const matrix1 = await interaction.options.get("matrix1");
+      const matrix2 = await interaction.options.get("matrix2");
 
       const matrix1Converted = math.matrix(JSON.parse(matrix1.value));
       const matrix2Converted = math.matrix(JSON.parse(matrix2.value));
