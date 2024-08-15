@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
 const math = require("mathjs");
-const { execute } = require("./matrixEigen");
 
 module.exports = {
   // we will need 2 options --> the matrix composed of the basis vectors and the vector x itself
@@ -22,7 +21,7 @@ module.exports = {
       option
         .setName("x-vector")
         .setDescription(
-          "please provide the coordinates of the vector x in array format"
+          "please provide the entries of the vector x in array format"
         )
         .setRequired(true)
     ),
