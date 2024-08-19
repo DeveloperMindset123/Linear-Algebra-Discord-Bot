@@ -206,6 +206,26 @@ const gramSchmidt = async (vectorMatrix) => {
         )
       );
       console.log(`product 1 : ${orthogonalVector1}`);
+      // add the data to the orthogonalVectors array
+      orthogonalVectors.push(math.matrix(orthogonalVector1));
+
+      // next, normalize the vector and add it to the orthonormal array
+      // ? recall the normalization formula to be the following --> (1 / || v || * v) where v represents the orthogonal vector
+      // ? formula for calculating length of the vector --> math.sqrt(math.dot(vector,vector)) --> important to remember
+      // ! Ensure that the resulting vectors are then converted back into matrix when being inserted into the array
+      const unitVector2 = math.multiply(
+        1 / math.sqrt(math.dot(orthogonalVector1, orthogonalVector1)),
+        orthogonalVector1
+      );
+      orthonormalVectors.push(math.matrix(unitVector2));
+
+      // ! test out the resulting array
+      console.warn(
+        `The resulting orthogonal vector current is : ${orthogonalVectors}`
+      );
+      console.warn(
+        `The resulting orthonormal vector currently is : ${orthonormalVectors}`
+      );
       /*const orthogonalVector2 = math.subtract(
           math.matrix(
             vectorMatrix._data[1],
