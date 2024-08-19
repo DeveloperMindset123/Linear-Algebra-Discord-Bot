@@ -78,9 +78,11 @@ module.exports = {
       console.info(
         `Testing the object view --> ${Object.entries(experimentalArray)}`
       );
+      // ** IT WORKS!!!!!
       console.log(
-        `Object based view --> ${JSON.stringify(experimentalArray._data)}`
+        `Object based view --> ${JSON.stringify(experimentalArray._data[0])}`
       );
+
       console.log(
         `Check what the keys are : ${Object.keys(experimentalArray)}`
       );
