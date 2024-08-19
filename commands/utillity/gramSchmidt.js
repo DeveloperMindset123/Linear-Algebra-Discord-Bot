@@ -199,7 +199,7 @@ const gramSchmidt = async (vectorMatrix) => {
       console.warn("Dimension 2 executing...");
       // x - (u1 * x) * u1 --> simplest format of the formula, in this case x = vectorMatrix[1]
       const orthogonalVector1 = math.subtract(
-        vectorMatrix._size[1],
+        vectorMatrix._data[1],
         math.multiply(
           math.multiply(unitVector1._data, vectorMatrix._data[1]),
           unitVector1._data
@@ -226,91 +226,69 @@ const gramSchmidt = async (vectorMatrix) => {
       console.warn(
         `The resulting orthonormal vector currently is : ${orthonormalVectors}`
       );
-      /*const orthogonalVector2 = math.subtract(
-          math.matrix(
-            vectorMatrix._data[1],
-            math.multiply(
-              // ! note : don't mess up vectorMatrix._data and vectorMatrix._size in the future
-              math.multiply(unitVector1._data, vectorMatrix._data[1]),
-              unitVector1._data
-            )
-          )
-        ); */
-      //console.log(`The resulting orthogonal vector is ${}`);
-      //orthogonalVectors.push(orthogonalVector2);
-      //console.log(`The current orthogonal vector is ${orthogonalVectors}`);
-      /* --> we will just do plain old
-        // ! this statement is being printed out, meaning the error is occuring within here
-        console.warn("Switch statement for dimension 2 is executing...");
-        // this means we are just working with 2 vectors and we simply apply the gram-schmidt process and be done with it there
-  
-        console.warn(`vectorMatrix[1]'s value : ${vectorMatrix._data[1]}`);
-        console.warn(`unit vector 1 : ${unitVector1}`);
-        const argument2 = await unitVectorMultiplication(
-          math.matrix(unitVector1),
-          math.matrix(vectorMatrix._data[1])
-        );
-        // error occuring in this line
-        const orthogonalVector = math.subtract(
-          math.matrix(vectorMatrix._data[1]),
-          math.matrix(argument2)
-        );
-        // normalize the vector --> (1 / ||v|| * v)
-        // simply call on the helper function vectorNormalization by passing in the orthogonalVector as the parameter value in this case and the logic within the function defined will handle the rest
-        let unitVector2 = await vectorNormalization(
-          math.matrix(orthogonalVector)
-        );
-        // add the newly created unit vector into the array of orthonormal vectors
-        orthonormalVectors.push(math.matrix(unitVector2));
-        break;
-      // in the case that we are working with three vectors in this case */
       break;
 
     case 3:
-      console.warn("Switch statement for dimension 3 is executing...");
-      // this will require some repetitive logic from case 2 as well as some addition of it's own
-      // orthogonalVector2 =  x - ((u1 * x) * u1) where x = VectorMatrix[1]
-      const orthogonalVector2of3 = math.subtract(
-        math.matrix(vectorMatrix._data[1]),
-        await unitVectorMultiplication(
-          math.matrix(unitVector1),
-          math.matrix(vectorMatrix._data[1])
+      console.warn("Dimension 3 is executing...");
+      const orthogonalVector1of2 = math.subtract(
+        vectorMatrix._data[1],
+        math.multiply(
+          math.multiply(unitVector1, vectorMatrix._data[1]),
+          unitVector1._data
         )
       );
-      const unitVector2Of3 = await vectorNormalization(
-        math.matrix(orthogonalVector2of3)
+
+      orthogonalVectors.push(math.matrix(orthogonalVector1of2));
+      const unitVector2of3 = math.multiply(
+        1 / math.sqrt(math.dot(orthogonalVector1of2, orthogonalVector1of2)),
+        orthogonalVector1of2
       );
-      // othrogonalVector3 = (x - (u1 * x) * u1)  - ((u2 * x) * u2) where x = vectorMatrix[2]
-      // TODO :  refactor this
-      // step 1: calculate result = x - ((u1 * x) * u1) where x = vectorMatrix[2]
-      const orthogonalVector3Part1 = math.subtract(
-        math.matrix(vectorMatrix._data[2]),
-        await unitVectorMultiplication(
-          math.matrix(unitVector1),
-          math.matrix(vectorMatrix._data[2])
+
+      orthonormalVectors.push(unitVector2of3);
+      /**
+       * @NOTE Formula (For 3 vectors) --> x - ( ((u1 * x) * u1) + ((u2 * x) * u2)) )
+       * @Reference https://www.khanacademy.org/math/linear-algebra/alternate-bases/orthonormal-basis/v/linear-algebra-gram-schmidt-example-with-3-basis-vectors --> Link to explain how gram-schmidt can be calculated for 3 or more vectors in detail
+       * @Explanation The reason my answer was incorrect was due to not implementing the formula correctly initially
+       */
+      const orthogonalVector3Part1 = math.add(
+        math.multiply(
+          math.multiply(unitVector1, vectorMatrix._data[2]),
+          unitVector1
+        ),
+        math.multiply(
+          math.multiply(unitVector2of3, vectorMatrix._data[2]),
+          unitVector2of3
         )
       );
-      // step 2 : calculate result = result - ((u2 * x) * u2)
+
       const orthogonalVector3 = math.subtract(
-        math.matrix(orthogonalVector3Part1),
-        await unitVectorMultiplication(
-          math.matrix(unitVector2Of3),
-          math.matrix(vectorMatrix._data[2])
-        )
+        vectorMatrix._data[2],
+        orthogonalVector3Part1
       );
-      // normalize the vector and add the unit vectors to the array
-      const unitVector3 = await vectorNormalization(
-        math.matrix(orthogonalVector3)
+      orthonormalVectors.push(math.matrix(orthogonalVector3));
+      // normalize and add to normalized array -->() 1 / || v || ) * v where v = orthogonalVector3
+      const unitVector3 = math.multiply(
+        1 / math.sqrt(math.dot(orthogonalVector3, orthogonalVector3)),
+        orthogonalVector3
       );
-      orthonormalVectors.push(
-        math.matrix(unitVector2Of3),
-        math.matrix(unitVector3)
-      );
+      orthonormalVectors.push(unitVector3);
+      console.log(`The current unit vectors are ${orthonormalVectors}`);
       break;
     case 4:
       console.warn("Switch statement for dimension 4 is executing...");
-      // assuming in this case we are working with 4 vectors instead
-      // unitVector2 = x - (u1 * x) * u1 where x = vectorMatrix[1]
+      // formula to implement : x - ((u1 * x) * u1) where x = vectorMatrix._data[1]
+      const orthogonalVector2of4 = math.subtract(
+        vectorMatrix._data[1],
+        math.multiply(
+          math.multiply(unitVector1, vectorMatrix._data[1]),
+          unitVector1
+        )
+      );
+
+      // formula to implement : x - ( ((u1 * x) * u1) + ((u2 * x) * u2) ) where x = vectorMatrix._data[2]
+
+      // formula to implement : x - ( ((u1 * x) * u1) + ((u2 * x) * u2) + ((u3 * x) * u3) ) where x = vectorMatrix._data[3]
+      /* --> stale code, too much bugs to fix
       const orthogonalVector2of4 = math.subtract(
         math.matrix(vectorMatrix._data[1]),
         await unitVectorMultiplication(
@@ -392,13 +370,14 @@ const gramSchmidt = async (vectorMatrix) => {
         math.matrix(unitVector2of4),
         math.matrix(unitVector3of4),
         math.matrix(unitVector4)
-      );
+      ); */
       break;
 
     case 5:
       console.warn("Switch statement for dimension 5 is executing...");
       // working with 5 vectors
       // orthognal-x = x - ((u1 * x) * u1) where x = vectorMatrix[1] --> aka the second vector
+      /* --> stale code, causes too many errors
       const orthogonalVector2of5 = math.subtract(
         math.matrix(vectorMatrix._data[1]),
         await unitVectorMultiplication(
@@ -507,7 +486,7 @@ const gramSchmidt = async (vectorMatrix) => {
         math.matrix(unitVector3of5),
         math.matrix(unitVector4of5),
         math.matrix(unitVector5)
-      );
+      ); */
       break;
     default:
       // break out of the loop, so some kind of value can be returned
