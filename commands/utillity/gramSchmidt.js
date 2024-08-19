@@ -19,7 +19,7 @@ module.exports = {
   execute: async function (interaction) {
     try {
       await interaction.deferReply({
-        ephemeral: false,
+        ephemeral: true,
       });
 
       // ! NOTE : test works now
@@ -47,14 +47,15 @@ module.exports = {
       console.log(`Retrieved number of vectors : ${numberOfVectors}`);
 
       // ! DON'T Remove --> math.matrix doesn't return a 2D array, it returns an object, keep that in mind
-      const result2 = math.matrix(
-        // directly pass in the matrix object, it contains all the infroamtion that is needed to begin with
-        await gramSchmidt(input)
-      );
 
+      const result2 =
+        // directly pass in the matrix object, it contains all the infroamtion that is needed to begin with
+        math.matrix(await gramSchmidt(input));
       console.info(`The resulting matrix from the user input is ${result2}`);
+
+      console.log(math.multiply(2, math.matrix([1, 1, 1, 1])));
       await interaction.editReply({
-        content: `Successful execution of command, resulting value is ${result2}`,
+        content: `Successful execution of command`,
       });
     } catch (error) {
       console.error(error);
@@ -84,6 +85,7 @@ const vectorLength = async (currVector) => {
 exports.vectorLength = vectorLength;
 // NOTE : for the first vector, can just pass in vectorMatrix[0] to access the first vector entry in the matrix
 // ** This function is the most important as it connects everything else together in the code --> vector
+// ? This function is not needed, since math.multiply(scalar, vector) works just fine
 const scalarVectorMultiplication = async (scalarValue, vector) => {
   // iterate through each of the individual entries of the vector and multiply the entries by the corresponding scalarValue
   // check if the values provided are undefined or not
@@ -107,6 +109,7 @@ exports.scalarVectorMultiplication = scalarVectorMultiplication;
 
 // define a function since we will need to repetitively write the logic to normalize the vector otherwise
 // remember that the formula for vector normalization is simply (1 / ||v||) * v
+// ! Don't use this function either, simply use math.multiply instead as that would be more accurate to implement --> later on you may migrate to a function instead
 const vectorNormalization = async (vector) => {
   // utilize the vector scalar multiplication function to update the values here
   // we can utilize both of the functions defined above to calculate the length of the vector in this case
@@ -151,7 +154,15 @@ const gramSchmidt = async (vectorMatrix) => {
   // we only need to know the number of rows
   // check if the number of vectors that we are working with is 1, we cannot apply gram-scmdit if we only have one vector
   // declare an empty array to store the newly created orthonormal vectors
+
+  // ! Use this array to store the orthogonal vectors
+  let orthogonalVectors = [];
+  // store the first vector here
+  orthogonalVectors.push(math.matrix(vectorMatrix._data[0]));
+
+  // ? use this array to store the orthonormal vectors
   let orthonormalVectors = [];
+  const dimension = vectorMatrix._size[0];
   //let ArrayVector = [];
   const matrixDimension = vectorMatrix._size;
   console.log(`Matrix Dimension : ${matrixDimension}`);
@@ -167,42 +178,74 @@ const gramSchmidt = async (vectorMatrix) => {
 
   //console.log(`the first vector in the matrix is : ${ArrayVector[0]}`);
   // ensure that your passing in the appropriate value --> vectorNormalization should also return a math.matrix based value in this case
-  const unitVector1 = await vectorNormalization(vectorMatrix._data[0]);
-  // add the first unit vector to the array
-  orthonormalVectors.push(math.matrix(unitVector1));
-  // print out the vector to see what it is
-  console.log(`The unit vector is ${unitVector1}`);
+  console.warn(vectorMatrix._data[0]);
+  const unitVector1 = math.matrix(
+    math.multiply(
+      1 / math.sqrt(math.dot(vectorMatrix._data[0], vectorMatrix._data[0])),
+      vectorMatrix._data[0]
+    )
+  );
 
-  // use a switch statement to calculate for upto 10 vectors, rather than a more complex recursive approach, since for the context of the problem, we are not gonna be working with anything more than 3-4 vectors for such a question as students
-  //  a switch statement would be more suitable for me in this case
-  // NOTE : removed for loop, overcomplicates things --> we will know the matrix of the index we are working with here and storing the values in the array instead
-  switch (parseInt(vectorMatrix._size[0])) {
+  console.warn(`The resulting unit vector is ${unitVector1._data}`);
+  //await vectorNormalization(vectorMatrix._data[0]);
+  // add the first unit vector to the array
+  orthonormalVectors.push(unitVector1);
+  console.log(`current orthonormal vector array : ${orthonormalVectors}`);
+  console.log(`current orthogonal vector is : ${orthogonalVectors}`);
+
+  switch (dimension) {
     // in the case that we are working with 2 vectors
     case 2:
-      // ! this statement is being printed out, meaning the error is occuring within here
-      console.warn("Switch statement for dimension 2 is executing...");
-      // this means we are just working with 2 vectors and we simply apply the gram-schmidt process and be done with it there
-      // x - (u1 * x) * u1 --> simplest format of the formula, in this case x = vectorMatrix[i]
-      console.warn(`vectorMatrix[1]'s value : ${vectorMatrix._data[1]}`);
-      console.warn(`unit vector 1 : ${unitVector1}`);
-      const argument2 = await unitVectorMultiplication(
-        math.matrix(unitVector1),
-        math.matrix(vectorMatrix._data[1])
+      console.warn("Dimension 2 executing...");
+      // x - (u1 * x) * u1 --> simplest format of the formula, in this case x = vectorMatrix[1]
+      const orthogonalVector1 = math.subtract(
+        vectorMatrix._size[1],
+        math.multiply(
+          math.multiply(unitVector1._data, vectorMatrix._data[1]),
+          unitVector1._data
+        )
       );
-      // error occuring in this line
-      const orthogonalVector = math.subtract(
-        math.matrix(vectorMatrix._data[1]),
-        math.matrix(argument2)
-      );
-      // normalize the vector --> (1 / ||v|| * v)
-      // simply call on the helper function vectorNormalization by passing in the orthogonalVector as the parameter value in this case and the logic within the function defined will handle the rest
-      let unitVector2 = await vectorNormalization(
-        math.matrix(orthogonalVector)
-      );
-      // add the newly created unit vector into the array of orthonormal vectors
-      orthonormalVectors.push(math.matrix(unitVector2));
+      console.log(`product 1 : ${orthogonalVector1}`);
+      /*const orthogonalVector2 = math.subtract(
+          math.matrix(
+            vectorMatrix._data[1],
+            math.multiply(
+              // ! note : don't mess up vectorMatrix._data and vectorMatrix._size in the future
+              math.multiply(unitVector1._data, vectorMatrix._data[1]),
+              unitVector1._data
+            )
+          )
+        ); */
+      //console.log(`The resulting orthogonal vector is ${}`);
+      //orthogonalVectors.push(orthogonalVector2);
+      //console.log(`The current orthogonal vector is ${orthogonalVectors}`);
+      /* --> we will just do plain old
+        // ! this statement is being printed out, meaning the error is occuring within here
+        console.warn("Switch statement for dimension 2 is executing...");
+        // this means we are just working with 2 vectors and we simply apply the gram-schmidt process and be done with it there
+  
+        console.warn(`vectorMatrix[1]'s value : ${vectorMatrix._data[1]}`);
+        console.warn(`unit vector 1 : ${unitVector1}`);
+        const argument2 = await unitVectorMultiplication(
+          math.matrix(unitVector1),
+          math.matrix(vectorMatrix._data[1])
+        );
+        // error occuring in this line
+        const orthogonalVector = math.subtract(
+          math.matrix(vectorMatrix._data[1]),
+          math.matrix(argument2)
+        );
+        // normalize the vector --> (1 / ||v|| * v)
+        // simply call on the helper function vectorNormalization by passing in the orthogonalVector as the parameter value in this case and the logic within the function defined will handle the rest
+        let unitVector2 = await vectorNormalization(
+          math.matrix(orthogonalVector)
+        );
+        // add the newly created unit vector into the array of orthonormal vectors
+        orthonormalVectors.push(math.matrix(unitVector2));
+        break;
+      // in the case that we are working with three vectors in this case */
       break;
-    // in the case that we are working with three vectors in this case
+
     case 3:
       console.warn("Switch statement for dimension 3 is executing...");
       // this will require some repetitive logic from case 2 as well as some addition of it's own
