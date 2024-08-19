@@ -285,9 +285,88 @@ const gramSchmidt = async (vectorMatrix) => {
         )
       );
 
+      // add the resulting vector the the array
+      orthogonalVectors.push(math.matrix(orthogonalVector2of4));
+
+      // noramlize --> (1 / || v ||) * v
+      const unitVector2of4 = math.multiply(
+        1 / math.sqrt(math.dot(orthogonalVector2of4, orthogonalVector2of4)),
+        orthogonalVector2of4
+      );
+
+      orthonormalVectors.push(math.matrix(unitVector2of4));
+
       // formula to implement : x - ( ((u1 * x) * u1) + ((u2 * x) * u2) ) where x = vectorMatrix._data[2]
+      // ! check this in the case that there might be some kind of errors
+      const orthogonalVector3of4Part1 = math.add(
+        math.multiply(
+          math.multiply(unitVector1, vectorMatrix._data[2]),
+          unitVector1
+        ),
+        math.multiply(
+          math.multiply(unitVector2of4, vectorMatrix._data[2]),
+          unitVector2of4
+        )
+      );
+
+      const orthogonalVector3of4 = math.subtract(
+        vectorMatrix._data[2],
+        orthogonalVector3of4Part1
+      );
+      // add the vector to the array
+      orthogonalVectors.push(math.matrix(orthogonalVector3of4));
+
+      // noramlize (reference : ( 1 / || v || ) * v )
+      const unitVector3of4 = math.multiply(
+        1 / math.sqrt(math.dot(orthogonalVector3of4, orthogonalVector3of4)),
+        orthogonalVector3of4
+      );
+
+      // add it to the unit vector array
+      orthonormalVectors.push(math.matrix(unitVector3of4));
 
       // formula to implement : x - ( ((u1 * x) * u1) + ((u2 * x) * u2) + ((u3 * x) * u3) ) where x = vectorMatrix._data[3]
+      const orthogonalVector4 = math.subtract(
+        vectorMatrix._data[3],
+        math.add(
+          math.add(
+            // (( u1 * x) * u1)
+            math.multiply(
+              math.multiply(unitVector1, vectorMatrix._data[3]),
+              unitVector1
+            ),
+            // (( u2 * x) * u2)
+            math.multiply(
+              math.multiply(unitVector2of4, vectorMatrix._data[3]),
+              unitVector2of4
+            )
+          ),
+          // (u3 * x) * x
+          math.multiply(
+            math.multiply(unitVector3of4, vectorMatrix._data[3]),
+            unitVector3of4
+          )
+        )
+      );
+      // ? I am getting a value here it seems
+      //console.log(`Resulting orthogonal vector 4 : ${orthogonalVector4}`);
+
+      // add the orthogonal vector to the array
+      // !culprit --> added the orthogonal vector to the wrong array, added it to orthonormal array instead of orthogonal array
+      orthogonalVectors.push(math.matrix(orthogonalVector4));
+
+      // noramlize (@Referenc --> 1 / || v || * v)
+      const unitVector4 = math.multiply(
+        math.sqrt(math.dot(orthogonalVector4, orthogonalVector4)),
+        orthogonalVector4
+      );
+
+      // add the vector to the array
+      orthonormalVectors.push(math.matrix(unitVector4));
+
+      // ? for testing purposes --> just to check there are 4 vectors and all the vectors are orthogonal to one another
+      console.warn(`The current orthogonal vectors are : ${orthogonalVectors}`);
+      console.log(`The unit vectors are : ${orthonormalVectors}`);
       /* --> stale code, too much bugs to fix
       const orthogonalVector2of4 = math.subtract(
         math.matrix(vectorMatrix._data[1]),
