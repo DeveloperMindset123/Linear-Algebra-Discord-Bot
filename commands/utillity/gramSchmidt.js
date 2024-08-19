@@ -16,13 +16,15 @@ module.exports = {
         .setDescription("please provide ")
         .setRequired(true)
     )
+    // TODO : Remove this, this option is no longer needed
     .addStringOption((option) =>
       option
         .setName("matrix-dimension")
         .setDescription(
           "please provide the number of vectors that we are working with"
         )
-        .setRequired(true)
+        // make the requirement for this optional, as it will not be used
+        .setRequired(false)
     ),
 
   execute: async function (interaction) {
@@ -44,10 +46,33 @@ module.exports = {
           [-2, 9, 0, 5],
         ],
         4
+
       ); */
       //console.info(`resulting value : ${math.matrix(result)}`);
       //console.info(`${math.dot([0, -1, -1, 0], [-3, 9, -1, 4])}`);
 
+      // retrieve and convert the inputs into math.matrix based objects
+      // to retrieve the array, we will need to target the _data object
+      // ? The following are the returned keys if Object.keys(inputMatrixArray) is used --> _data,_size,_datatype --> we are interested in data and _size only
+      const input = math.matrix(
+        JSON.parse(await interaction.options.get("vector-matrix").value)
+      );
+
+      // we will need to implement a map function to create the new array
+      let inputMatrixArray = [];
+      //const inputMatrixArray = new Array(input._data); // stores the vectors in 2D array as part of the corresponding value to the key _data
+      const numberOfVectors = parseInt(input._size[0]); // stores the dimension of the matrix, a 2x4 matrix would be stored as [2,4] for example
+      for (let i = 0; i < numberOfVectors; i++) {
+        console.log("Current vector is :", input._data[i]);
+        // ! May require adding Array.from statement here
+        inputMatrixArray.push(input._data[i]);
+        console.warn(inputMatrixArray);
+      }
+
+      console.log(`Retrieved input matrix : ${inputMatrixArray}`);
+      console.log(`Retrieved number of vectors : ${numberOfVectors}`);
+
+      /*
       // retrieve the user's input and apply the gram schmidt equation
       const inputMatrix = await interaction.options.get("vector-matrix");
       const newArray = Array.from(Object.values(inputMatrix));
@@ -91,10 +116,11 @@ module.exports = {
       // ! Note : This is being properly recieved as the input
       // ? The error is most likely occuring within the gram-schmidt function body itself, there's something wrong with the logic there
       console.log(`The retrieved inputMatrix is ${inputMatrix}`);
-      console.log(`the dimension of the vector is ${inputDimension}`);
-      const result2 = await gramSchmidt(inputMatrix, inputDimension);
-      parseInt(
-        JSON.parse(await interaction.options.get("matrix-dimension").value)
+      console.log(`the dimension of the vector is ${inputDimension}`); */
+
+      // ! DON'T Remove --> math.matrix doesn't return a 2D array, it returns an object, keep that in mind
+      const result2 = math.matrix(
+        await gramSchmidt(inputMatrixArray, numberOfVectors)
       );
 
       // print out the result
@@ -135,7 +161,7 @@ module.exports = {
 
       // reply on the discord chat the relevant response
       await interaction.editReply({
-        content: `This Command is still in development, cannot be used at the moment.`,
+        content: `Successful execution of command, resulting value is ${result2}`,
       });
     } catch (error) {
       console.error(error);
@@ -232,12 +258,7 @@ const vectorLength = async (currVector) => {
   // ? This could be causing errors due to improper datatype being passed in
   // this is being printed out successfully
   console.log(`current vector : ${currVector}`);
-  return math.sqrt(
-    math.dot(
-      math.matrix(JSON.parse(currVector)),
-      math.matrix(JSON.parse(currVector))
-    )
-  );
+  return math.sqrt(math.dot(currVector, currVector));
 };
 // add the above function to the export object --> creates a key named vectorLength and a value set to the function vectorLength
 exports.vectorLength = vectorLength;
@@ -259,7 +280,7 @@ const scalarVectorMultiplication = async (scalarValue, vectorValue) => {
     vectorValue[i] = parseFloat(scalarValue * vectorValue[i]);
   }
   // should return the modified vector
-  return math.matrix(vectorValue);
+  return vectorValue;
 };
 // add the function scalarVectorMultuplication to the list of functions to be exported
 exports.scalarVectorMultiplication = scalarVectorMultiplication;
@@ -277,18 +298,14 @@ const vectorNormalization = async (vector) => {
     console.error("The vector is undefined");
     return;
   }
-  console.log(
-    `The resulting vector from the multiplication is ${scalarVectorMultiplication(
-      1 / vectorLength(math.matrix(JSON.parse(vector))),
-      math.matrix(JSON.parse(vector))
-    )}`
-  );
-  return await scalarVectorMultiplication(
-    // argument 1 being passed onto scalarVectorMultiplication
-    1 / vectorLength(math.matrix(JSON.parse(vector))),
-
+  //console.log(`The resulting vector from the multiplication is ${scalarVectorMultiplication(1 / vectorLength(math.matrix(JSON.parse(vector))), math.matrix(JSON.parse(vector)))}`);
+  return (
+    await scalarVectorMultiplication(
+      // argument 1 being passed onto scalarVectorMultiplication
+      1 / vectorLength(vector)
+    ),
     // argument 2 being passed in for the scalarVector multiplication
-    math.matrix(JSON.parse(vector))
+    vector
   );
 };
 exports.vectorNormalization = vectorNormalization;
