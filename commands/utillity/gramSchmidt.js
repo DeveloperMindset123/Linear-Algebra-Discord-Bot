@@ -363,97 +363,127 @@ const gramSchmidt = async (vectorMatrix) => {
 
       // add the vector to the array
       orthonormalVectors.push(math.matrix(unitVector4));
-
-      // ? for testing purposes --> just to check there are 4 vectors and all the vectors are orthogonal to one another
-      console.warn(`The current orthogonal vectors are : ${orthogonalVectors}`);
-      console.log(`The unit vectors are : ${orthonormalVectors}`);
-      /* --> stale code, too much bugs to fix
-      const orthogonalVector2of4 = math.subtract(
-        math.matrix(vectorMatrix._data[1]),
-        await unitVectorMultiplication(
-          math.matrix(unitVector1),
-          math.matrix(vectorMatrix._data[1])
-        )
-      );
-      const unitVector2of4 = await vectorNormalization(
-        math.matrix(orthogonalVector2of4)
-      );
-
-      // this is the first part --> result = x - ((u1 * x) * u1)
-      const orthogonalVector3of4Part1 = math.subtract(
-        math.matrix(vectorMatrix._data[2]),
-        await unitVectorMultiplication(
-          math.matrix(unitVector1),
-          math.matrix(vectorMatrix._data[2])
-        )
-      );
-      // step 2 --> result=result - ((u2 * x) * u2) where x = vectorMatrix[2]
-      const orthogonalVector3of4 = math.subtract(
-        math.matrix(orthogonalVector3of4Part1),
-        await unitVectorMultiplication(
-          math.matrix(unitVector2of4),
-          math.matrix(vectorMatrix._data[2])
-        )
-      );
-
-      // normalize the resulting vector
-      const unitVector3of4 = await vectorNormalization(
-        math.matrix(orthogonalVector3of4)
-      );
-      // orthogonalVector4 = x - ((u1 * x) * u1) - ((u2 * x) * u2) - ((u3 * x) * u3) where x = vectorMatrix[3] --> aka the last value in the 2d array
-
-      // TODO : Remove later
-      const experimentalTest = await unitVectorMultiplication(
-        math.matrix(unitVector1),
-        math.matrix(vectorMatrix[3])
-      );
-
-      // ? Seems like the values are being properly recieved
-      console.log(
-        `Testing values being passed in : ${vectorMatrix[3]}, ${unitVector1._data}`
-      );
-      // the error is occuring here, meaning unitVectorMultuplication is the culprint
-      console.error(`Experimental Test : ${experimentalTest}`);
-      // this will calculate the first part result = (x - ((u1 * x) * u1))
-      const orthogonalVector4Part1 = math.subtract(
-        math.matrix(vectorMatrix._data[3]),
-        // NOTE that unitVector1 is globally accessible, as that is the first step of the algorithm
-        await unitVectorMultiplication(
-          math.matrix(unitVector1),
-          math.matrix(vectorMatrix._data[3])
-        )
-      );
-
-      // next, we take the orthogonalVector4Part1 and use it to calcualte the next part --> result = result - ((u2 * x) * u2)
-      const orthogonalVector4Part2 = math.subtract(
-        math.matrix(orthogonalVector4Part1),
-        await unitVectorMultiplication(
-          math.matrix(unitVector2of4),
-          math.matrix(vectorMatrix._data[3])
-        )
-      );
-
-      // lastly, we use the value stored in orthogonalVector4Part2 to calcualte the last part of the vector, whcih we can name orhtogonalVector4 as no additional parts would be neeccessary in this case --> result = result - ((u3 * x) * u3)
-      const orthogonalVector4 = math.subtract(
-        math.matrix(orthogonalVector4Part2),
-        await unitVectorMultiplication(
-          math.matrix(unitVector3of4),
-          vectorMatrix._data[3]
-        )
-      );
-      const unitVector4 = await vectorNormalization(
-        math.matrix(orthogonalVector4)
-      );
-      // now we have the vector, all we do is normalize it and add all the orthonormal vectors into the array
-      orthonormalVectors.push(
-        math.matrix(unitVector2of4),
-        math.matrix(unitVector3of4),
-        math.matrix(unitVector4)
-      ); */
       break;
 
     case 5:
       console.warn("Switch statement for dimension 5 is executing...");
+
+      // formula to implement : x - ((u1 * x) * u1) --> orthogonal vector 2 where x = vectorMatrix._data[1]
+      const orthogonalVector2of5 = math.subtract(
+        vectorMatrix._data[1],
+        math.multiply(
+          math.multiply(unitVector1, vectorMatrix._data[1]),
+          unitVector1
+        )
+      );
+
+      orthogonalVectors.push(math.matrix(orthogonalVector2of5));
+      //normalize (reference : 1 / || v || * v) where v = orthogonalVector2of5
+      const unitVector2of5 = math.multiply(
+        math.sqrt(math.dot(orthogonalVector2of5, orthogonalVector2of5)),
+        orthogonalVector2of5
+      );
+      orthonormalVectors.push(math.matrix(unitVector2of5));
+      // formula to implement : x- ((u1 * x) * u2) + ((u1 * x) * u1) --> orthogonal vector 3 where x = vectorMatrix._data[2]
+      const orhtogonalVector3of5 = math.subtract(
+        vectorMatrix._data[2],
+        math.add(
+          math.multiply(
+            math.multiply(unitVector1, vectorMatrix._data[2]),
+            unitVector1
+          ),
+          math.multiply(
+            math.multiply(unitVector2of5, vectorMatrix._data[2]),
+            unitVector2of5
+          )
+        )
+      );
+      orthogonalVectors.push(math.matrix(orhtogonalVector3of5));
+
+      // unit vector (reference : 1 / || v || * v)
+      const unitVector3of5 = math.multiply(
+        math.sqrt(math.dot(orhtogonalVector3of5, orhtogonalVector3of5)),
+        orhtogonalVector3of5
+      );
+      orthonormalVectors.push(math.matrix(unitVector3of5));
+
+      // formula to implement : x - ((u1 * x) * u1) + ((u2 * x) * u2) + ((u3 * x) * u3) --> orthogonal vector 4 where x = vectorMatrix._data[3]
+      const orthogonalVector4of5 = math.subtract(
+        // x
+        vectorMatrix._data[3],
+        math.add(
+          math.add(
+            // (( u1 * x) * u1) + (( u2 * x) * u2)
+            math.multiply(
+              math.multiply(unitVector1, vectorMatrix._data[3]),
+              unitVector1
+            ),
+            math.multiply(
+              math.multiply(unitVector2of5, vectorMatrix._data[3]),
+              unitVector2of5
+            )
+          ),
+          math.multiply(
+            math.multiply(unitVector3of5, vectorMatrix._data[3]),
+            unitVector3of5
+          )
+        )
+      );
+
+      // add the vector to the array
+      orthogonalVectors.push(math.matrix(orthogonalVector4of5));
+
+      // normalize the vectors --> (reference  : (1 / || v || * v))
+      const unitVector4of5 = math.multiply(
+        1 / math.sqrt(math.dot(orthogonalVector4of5, orthogonalVector4of5)),
+        orthogonalVector4of5
+      );
+      orthonormalVectors.push(math.matrix(unitVector4of5));
+
+      // formula to implement: x - (( u1 * x) * u1) + (( u2 * x) * u2) + (( u3 * x) * u3) + ((u4 * x) * u4) --> orthogonal vector 5 where x = vectorMatrix._data[4]
+      const orthogonalVector5 = math.subtract(
+        vectorMatrix._data[4],
+        math.add(
+          math.add(
+            math.multiply(
+              math.multiply(unitVector1, vectorMatrix._data[1]),
+              unitVector1
+            ),
+            math.multiply(
+              math.multiply(unitVector2of5, vectorMatrix._data[4]),
+              unitVector2of5
+            )
+          ),
+          math.add(
+            math.multiply(
+              math.multiply(unitVector3of5, vectorMatrix._data[4]),
+              unitVector3of5
+            ),
+            math.multiply(
+              math.multiply(unitVector4of5, vectorMatrix._data[4]),
+              unitVector4of5
+            )
+          )
+        )
+      );
+
+      orthogonalVectors.push(math.matrix(orthogonalVector5));
+
+      // normalize the vector (reference : ( (1 / || v ||) * v) )
+      const unitVector5 = math.multiply(
+        math.sqrt(math.dot(orthogonalVector5, orthogonalVector5)),
+        orthogonalVector5
+      );
+
+      orthonormalVectors.push(math.matrix(unitVector5));
+
+      // ? Testing
+      console.warn(
+        `The current orthogonal vectors are : ${orthogonalVectors}\n\n`
+      );
+      console.log(
+        `The current orthonormal vectors are : ${orthonormalVectors}`
+      );
       // working with 5 vectors
       // orthognal-x = x - ((u1 * x) * u1) where x = vectorMatrix[1] --> aka the second vector
       /* --> stale code, causes too many errors
