@@ -24,36 +24,40 @@ module.exports = {
         .setRequired(true)
     ),
   execute: async function (interaction) {
-    await interaction.deferReply({
-      ephemeral: true,
-    });
-    const vector1 = math.matrix(
-      JSON.parse(await interaction.options.get("vector1").value)
-    );
-    const vector2 = math.matrix(
-      JSON.parse(await interaction.options.get("vector2").value)
-    );
-    const resultInRadians = math.acos(
-      math.divide(
-        math.dot(vector1, vector2),
-        math.multiply(
-          math.sqrt(math.dot(vector1, vector1)),
-          math.sqrt(math.dot(vector2, vector2))
+    try {
+      await interaction.deferReply({
+        ephemeral: true,
+      });
+      const vector1 = math.matrix(
+        JSON.parse(await interaction.options.get("vector1").value)
+      );
+      const vector2 = math.matrix(
+        JSON.parse(await interaction.options.get("vector2").value)
+      );
+      const resultInRadians = math.acos(
+        math.divide(
+          math.dot(vector1, vector2),
+          math.multiply(
+            math.sqrt(math.dot(vector1, vector1)),
+            math.sqrt(math.dot(vector2, vector2))
+          )
         )
-      )
-    );
+      );
 
-    console.log(`Resulting value (radians) : ${resultInRadians}`);
+      // convert to degrees (radians * 180 / (pie)
+      const resultInDegrees = math.multiply(
+        resultInRadians,
+        math.divide(180, math.pi)
+      );
 
-    // convert to degrees (radians * 180 / (pie)
-    const resultInDegrees = math.multiply(
-      resultInRadians,
-      math.divide(180, math.pi)
-    );
-    console.log(`Resulting values in (in degrees) : ${resultInDegrees}`);
-
-    await interaction.editReply({
-      content: `Successful exeuction of command!\n Angle (in radians) : ${resultInRadians} \n\n Angle (in degrees) : ${resultInDegrees}`,
-    });
+      await interaction.editReply({
+        content: `Successful exeuction of command!\n Angle (in radians) : ${resultInRadians} \n\n Angle (in degrees) : ${resultInDegrees}`,
+      });
+    } catch (error) {
+      console.error(error);
+      await interaction.editReply({
+        content: "There was an error in the execution of the command.",
+      });
+    }
   },
 };
