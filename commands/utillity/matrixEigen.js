@@ -36,6 +36,7 @@ module.exports = {
       });
 
       await interaction.editReply({
+        // TODO : Replace the current string message with the embedding made
         content: `End of successful execution. The eigenvalues are [${eigenvalues}] and the corresponding eigenvectors are [${eigenvectorsList}]`,
       });
     } catch (error) {
