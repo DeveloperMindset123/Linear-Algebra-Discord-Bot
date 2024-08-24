@@ -63,6 +63,7 @@ client.commands = new Collection();
 const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath);
 
+// logic for reading the custom commands implemented in commands/utillity
 for (const folder of commandFolders) {
   const commandsPath = path.join(foldersPath, folder);
   const commandFiles = fs
@@ -71,7 +72,6 @@ for (const folder of commandFolders) {
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath);
-    // Set a new item in the Collection with the key as the command name and the value as the exported module
     if ("data" in command && "execute" in command) {
       client.commands.set(command.data.name, command);
     } else {
@@ -82,9 +82,8 @@ for (const folder of commandFolders) {
   }
 }
 
-// get the path for the events directory
+// logic for checking/reading the events from events directory
 const eventsPath = path.join(__dirname, "events");
-// parse through the files present within the events directory --> mapping through them essentially --> filter out and only select .js files, thus the added logic to check using the filter method
 const eventFiles = fs
   .readdirSync(eventsPath)
   .filter((file) => file.endsWith(".js"));
@@ -92,13 +91,9 @@ const eventFiles = fs
 for (const file of eventFiles) {
   const filePath = path.join(eventsPath, file);
   const event = require(filePath);
-  // check if the event should only be executed once or not, if so , exeucte it once based on whatever arguments provided --> the spread operator allows for dynamically specifying the arguments rather than limiting it to a finite number, more adaptabillity
   if (event.once) {
     client.once(event.name, (...args) => event.execute(...args));
   } else {
-    // think of (...args) x number of parameters the void function has, allowing for us to decide during execution how many number of arguments we want to provide during a particular event.
-    // Additionally, understand the architecture of client, the first argument that a takes in is the event, and the second is the logic for what should be done when this event gets triggered --> or in accordnace to discord's guide, it takes in 2 arguments, the event name and a callback function
-
     /**
      * @Topic Explanation of what a callback function in javascript is
      * @Detail A javascript callback is a function which is to be executed after another function has finished execution.
@@ -116,45 +111,4 @@ for (const file of eventFiles) {
  * @Reference https://stackoverflow.com/questions/69790469/discord-js-interactioncreate-and-messagecreate
  */
 
-/* --> have been imported within the events directory instead, if the code below gets uncommented, it will execute twice instead of once
-client.on(Events.InteractionCreate, async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
-
-  const command = interaction.client.commands.get(interaction.commandName);
-
-  if (!command) {
-    console.error(`No command matching ${interaction.commandName} was found.`);
-    return;
-  }
-
-  try {
-    await command.execute(interaction);
-  } catch (error) {
-    console.error(error);
-    if (interaction.replied || interaction.deferred) {
-      await interaction.followUp({
-        content: "There was an error while executing this command!",
-        ephemeral: true,
-      });
-    } else {
-      await interaction.reply({
-        content: "There was an error while executing this command!",
-        ephemeral: true,
-      });
-    }
-  }
-});
-
-client.on(Event.InviteCreate, async (interaction) => {
-  console.log(
-    `An invite has been created by ${interaction.inviter.tag}. The code is ${invite.code}`
-  );
-});
-
-client.once(Events.ClientReady, (readyClient) => {
-  console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-});
-// cotinue --> https://discordjs.guide/creating-your-bot/event-handling.html#individual-event-files
-
-// This line should be executed at the end of the file. */
 client.login(token);

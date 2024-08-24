@@ -282,6 +282,8 @@ module.exports = {
         content: `Successful execution of command!\n Orthogonal Vectors : ${orthogonalVectorArray} \n\n Orthonormal Vectors : ${orthonormalVecorsArray}`,
       });
     } catch (error) {
+      // TODO : Define the custom error embedding here
+
       console.error(error);
       await interaction.editReply({
         content: "There was an error executing this command!",
