@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const math = require("mathjs");
 
 module.exports = {
@@ -46,9 +46,62 @@ module.exports = {
         )}`,
       });
     } catch (error) {
+      // add the error embed here
+      const customErrorEmbed = new EmbedBuilder()
+        .setColor(0xff000)
+        .setTitle("Err (Click here for Reference Material)")
+        .setURL("https://www.youtube.com/watch?v=4zpkXxAUHcE")
+        .setAuthor({
+          name: "Ayan Das",
+          iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+          url: "https://github.com/DeveloperMindset123",
+        })
+        .setDescription(
+          "Either there was an internal server error or the proper input has not been inserted, please double check your inputs and try again. If the problem persists, please contant the developer @dasa60196@gmail.com"
+        )
+        .setThumbnail(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWru8q17zpOzzzT1s475ZS_8fOL1GS0teSw&s"
+        )
+        .addFields(
+          {
+            name: "Error Message",
+            value: "There wasn an error executing this command",
+          },
+          {
+            name: "\u200B",
+            value: "\u200B",
+          },
+          // !providing 2 hints is more than enough for quesiions such as this
+          {
+            name: "check your input",
+            value:
+              "A 2D array, with the entries being the 1d array containing the corresponding columns",
+            inline: true,
+          },
+          {
+            name: "check for commas",
+            value: "Entries should be seperated by commas",
+            inline: true,
+          }
+        )
+        .setImage(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWru8q17zpOzzzT1s475ZS_8fOL1GS0teSw&s"
+        )
+        .setTimestamp()
+        .setFooter({
+          text: `Command failed to execute due to ${error}`,
+          iconURL: "",
+        });
       console.error(error);
       await interaction.editReply({
         content: `There was an error in executing this command.`,
+        iconURL:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWru8q17zpOzzzT1s475ZS_8fOL1GS0teSw&s",
+      });
+
+      console.error(error);
+      await interaction.editReply({
+        embeds: [customEmbed],
       });
     }
   },
