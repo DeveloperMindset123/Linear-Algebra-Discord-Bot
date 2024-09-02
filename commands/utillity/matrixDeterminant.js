@@ -15,20 +15,40 @@ module.exports = {
 		),
 
 	execute: async function (interaction) {
+		await interaction.deferReply({
+			ephemeral: false,
+		});
 		try {
-			// TODO : Need to add custom embedding for correct output
-			await interaction.deferReply({
-				ephemeral: true,
-			});
 			const matrix = math.matrix(
 				JSON.parse(interaction.options.get("matrix").value)
 			);
 			const matrixDeterminant = math.det(matrix);
-			console.log(
-				`The resulting value determinant of the matrix ${matrix} is ${matrixDeterminant}`
-			);
-			interaction.editReply({
-				content: `End of successful execution! Resulting determinant being ${matrixDeterminant}`,
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(`Resulting determinant being ${matrixDeterminant}`)
+				.addFields(
+					{
+						name: "Reference 1",
+						value: "https://www.mathsisfun.com/algebra/matrix-determinant.html",
+					},
+					{
+						name: "Reference 2",
+						value: "https://www.youtube.com/watch?v=3ROzG6n4yMc",
+					},
+					{
+						name: "Explanation",
+						value:
+							"There's various methods involved when it comes to calculating the determinant of a matrix. It also depends on the dimension, while there exists a shortcut for calculating the determinant for a 2x2 matrix, for 3x3 matrix, you have the choice between sarrus's rule or laplace's expansion. For any other matrix greater than than, you must use laplace's expansion to break down the matrix in either 3x3 and apply sarrus's rule (less reommended) or break it down into 2x2 matrix and apply the shortcut (recommended), methods such as the cross product tends to be computationally expensive and error prone.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()

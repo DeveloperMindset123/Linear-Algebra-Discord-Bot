@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const math = require("mathjs");
 
 module.exports = {
@@ -17,11 +17,10 @@ module.exports = {
 		),
 
 	execute: async function (interaction) {
+		await interaction.deferReply({
+			ephemeral: false,
+		});
 		try {
-			await interaction.deferReply({
-				ephemeral: true,
-			});
-
 			const result = math.eigs(
 				math.matrix(JSON.parse(await interaction.options.get("matrix").value))
 			);
@@ -35,9 +34,36 @@ module.exports = {
 				eigenvectorsList.push(element.vector);
 			});
 
-			await interaction.editReply({
-				// TODO : Replace the current string message with the embedding made
-				content: `End of successful execution. The eigenvalues are [${eigenvalues}] and the corresponding eigenvectors are [${eigenvectorsList}]`,
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle("Successful execution of command")
+				.setDescription(
+					`The eigenvalues are [${eigenvalues}] and the corresponding eigenvectors are [${eigenvectorsList}]`
+				)
+				.addFields(
+					{
+						name: "Reference 1",
+						value:
+							"https://math.libretexts.org/Bookshelves/Linear_Algebra/A_First_Course_in_Linear_Algebra_(Kuttler)/07%3A_Spectral_Theory/7.01%3A_Eigenvalues_and_Eigenvectors_of_a_Matrix",
+					},
+					{
+						name: "Reference 2",
+						value: "https://www.youtube.com/watch?v=TQvxWaQnrqI",
+					},
+					{
+						name: "Explanation",
+						value:
+							"The simplest way to calculate eigenvalues is using the formula, normally in Linear Algebra textbooks, chapter 7 introduces the theoretical concept of eigenvalues and how it relates to Linear Transformation from a geometrical perspective and how eigenvalues must first be calculated using the det(A - (lambda)(identity-matrix) and then the corresponding eigenvectors can be calculated using ker(A-(lamda-value-n)(Identity-matrix), it is important to understand both the geometrical and algebraic aspect of eigenvectors and eigenvalues. The concept initially may seem difficult but is significantly simplified thanks to the formulas and understanding how to apply them in various practice problems.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()
@@ -87,6 +113,8 @@ module.exports = {
 					iconURL:
 						"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWru8q17zpOzzzT1s475ZS_8fOL1GS0teSw&s",
 				});
+
+			console.error(error);
 			return await interaction.editReply({
 				embeds: [customErrorEmbed],
 			});

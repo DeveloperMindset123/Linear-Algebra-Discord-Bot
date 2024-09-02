@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const math = require("mathjs");
 
 module.exports = {
@@ -22,29 +22,51 @@ module.exports = {
 				.setRequired(true)
 		),
 	execute: async function (interaction) {
+		await interaction.deferReply({
+			ephemeral: false,
+		});
 		try {
-			// TODO : Round the resulting values to whole numbers, otherwise, everything else works as intended
-			await interaction.deferReply({
-				ephemeral: true,
-			});
-			console.info(`Successful execution of command`);
-			await interaction.editReply({
-				content: `The coordinate vector is ${math.matrix(
-					JSON.parse(await interaction.options.get("x-coordinate-vector").value)
-				)} and the entries of the original vector is ${math.multiply(
-					math.inv(
-						math.matrix(
-							JSON.parse(
-								await interaction.options.get("basis-vector-matrix").value
-							)
-						)
-					),
-					math.matrix(
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(
+					`The coordinate vector is ${math.matrix(
 						JSON.parse(
 							await interaction.options.get("x-coordinate-vector").value
 						)
-					)
-				)}`,
+					)} and the entries of the original vector is ${math.multiply(
+						math.inv(
+							math.matrix(
+								JSON.parse(
+									await interaction.options.get("basis-vector-matrix").value
+								)
+							)
+						),
+						math.matrix(
+							JSON.parse(
+								await interaction.options.get("x-coordinate-vector").value
+							)
+						)
+					)}`
+				)
+				.addFields(
+					{
+						name: "Reference 1",
+						value: "https://www.youtube.com/watch?v=AL5uBQKZ_6A",
+					},
+					{
+						name: "Explanation",
+						value:
+							"One trick to calculate the coordinates of a vector is using the formula. vector-x=matrix-S * coordinate-vector-x, and this can be rewritten in terms of the coordiante vector x, as coordinate-vector-x=matrix-S-inverse * vector-x. Here matrix S is composed of the basis vectors and x is the resulting vector of the linear combination of the basis vectors. The original equation can also be used to calculate vector-x given the coordinate vector and the basis vector for a subsequent command.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()

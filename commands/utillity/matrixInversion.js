@@ -2,7 +2,7 @@
  * @SlashCommandBuilder Discord's built in function used to develop custom slash commands as the name suggests
  * @math math library used to simplify the computation involved
  */
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const math = require("mathjs");
 
 module.exports = {
@@ -24,21 +24,41 @@ module.exports = {
 
 	// we can can also write it as async function execute(interaction) { implement execution logic within the body }, I simply prefer this method instead since it makes more sense
 	execute: async function (interaction) {
+		await interaction.deferReply({
+			ephemeral: false,
+		});
 		try {
-			// TODO : Remove the excess comments, as well as provide step by step description in latex for how matrix inversion works
-			await interaction.deferReply({
-				ephemeral: true,
-			});
-
 			const originalMatrix = interaction.options.get("matrix");
 			const matrixConverted = math.matrix(JSON.parse(originalMatrix.value));
 			const invertedMatrix = math.inv(matrixConverted);
-
-			console.log(
-				`The original matrix entered was ${originalMatrix.value} and the resulting inverted matrix was ${invertedMatrix}`
-			);
-			await interaction.editReply({
-				content: `End of successful exeuction! Resulting matrix value being ${invertedMatrix}`,
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(`Resulting matrix value being ${invertedMatrix}`)
+				.addFields(
+					// TODO : Modify here as needed
+					{
+						name: "Reference 1",
+						value:
+							"https://math.libretexts.org/Bookshelves/Applied_Mathematics/Applied_Finite_Mathematics_(Sekhon_and_Bloom)/02%3A_Matrices/2.04%3A_Inverse_Matrices",
+					},
+					{
+						name: "Reference 2",
+						value: "https://www.youtube.com/watch?v=Fg7_mv3izR0&t=387s",
+					},
+					{
+						name: "Explanation",
+						value:
+							"The inverse of a matrix is calculated using the inverse algorithm for matrix of dimensionality 2x2 or greater. While a shortcut for calculating the inverse exists for 2x2 matrix, 3x3 matrix and higher relies on the inverse algorithm, the inverse algrithm is to simply place the original matrix and it's corresponding identity matrix side by side, forming an augmented matrix composed of two matrix. With the aim to convert the left matrix to row-reduced echelong form using gaussian elminiation and this will simultaneously also convert the identity matrix on the right into the inverse matrix. This approach can be quite tedious for higher dimension matrix and error prone, therefore, care must be taken during the calculation process.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()

@@ -1,14 +1,10 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const math = require("mathjs");
 
-// TOOD : remove the unneccessary console.log statements and add proper embedding to the interaction based responses later as part of cleanup
-
 module.exports = {
-	//cooldown : 30,
 	data: new SlashCommandBuilder()
 		.setName("matrix-multiplication")
 		.setDescription("Multiplies two matrix together")
-		// NOTE : the way this has been implemented may cause some kind of syntax errors, remove the curly braces if needed --> yup ths throws an error
 		.addStringOption((option) =>
 			option
 				.setName("matrix1")
@@ -27,11 +23,10 @@ module.exports = {
 		),
 
 	execute: async function (interaction) {
+		await interaction.deferReply({
+			ephemeral: false,
+		});
 		try {
-			await interaction.deferReply({
-				ephemeral: true,
-			});
-
 			const matrix1 = await interaction.options.get("matrix1");
 			const matrix2 = await interaction.options.get("matrix2");
 
@@ -42,12 +37,33 @@ module.exports = {
 				matrix1Converted,
 				matrix2Converted
 			);
-
-			console.log(
-				`The values entered were ${matrix1.value} and ${matrix2.value} and their resulting product was ${multipliedMatrix}`
-			);
-			await interaction.editReply({
-				content: `End of successful execution! Resulting matrix value being ${multipliedMatrix}`,
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(`Resulting matrix value being ${multipliedMatrix}`)
+				.addFields(
+					// TODO : Modify here as needed
+					{
+						name: "Reference 1",
+						value: "https://www.mathsisfun.com/algebra/matrix-multiplying.html",
+					},
+					{
+						name: "Reference 2",
+						value: "https://www.youtube.com/watch?v=vzt9c7iWPxs&t=1s",
+					},
+					{
+						name: "Explanation",
+						value:
+							"Matrix multiplication is a buildup of vector multiplication, and vector multiplication is the definition of dot product. Another way to view matrix multiplication is that it is a series of vector multiplication or multiple dot products. The pre-requisite for matrix multiplication is that the column of the first matrix must match the rows of the second matrix and the resulting matrix will be of the dimension where the row will be the same as the first matrix and the column will be the same as the second matrix.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()
@@ -95,6 +111,7 @@ module.exports = {
 					iconURL:
 						"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWru8q17zpOzzzT1s475ZS_8fOL1GS0teSw&s",
 				});
+			console.error(error);
 			return await interaction.editReply({
 				embeds: [customErrorEmbed],
 			});

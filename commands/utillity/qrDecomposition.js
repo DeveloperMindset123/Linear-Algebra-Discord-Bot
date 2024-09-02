@@ -17,24 +17,42 @@ module.exports = {
 		),
 
 	execute: async function (interaction) {
+		await interaction.deferReply({
+			ephemeral: false,
+		});
 		try {
-			await interaction.deferReply({
-				ephemeral: false,
-			});
-
 			const userInput = math.matrix(
 				JSON.parse(await interaction.options.get("matrix-a").value)
 			);
-			// returns an object, with the keys being the R and the Q matrix
 			const qrFactorization = math.qr(userInput);
 			const { Q, R } = qrFactorization;
-			console.log(`QR Factorization : ${qrFactorization}`);
-			console.warn(
-				`Testing to see if Q and R prints as intended --> Q : ${Q}, R : ${R}`
-			);
-			await interaction.editReply({
-				// TODO : Replace the current string message with the embedding made
-				content: `Successful execution of command!\n\n Matrix Q : ${Q} \n\n Matrix R : ${R}`,
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(`Matrix Q : ${Q} \n\n Matrix R : ${R}`)
+				.addFields(
+					// TODO : Modify here as needed
+					{
+						name: "Reference 1",
+						value: "https://www.statlect.com/matrix-algebra/QR-decomposition",
+					},
+					{
+						name: "Reference 2",
+						value: "https://ubcmath.github.io/MATH307/orthogonality/qr.html",
+					},
+					{
+						name: "Explanation",
+						value:
+							"In order to understand how QR decomposition works, you must first understand how gram-schmidt process works. Q represnets the orthogonal vectors determined using gram-schmidt and R follows specific entry based insertion by multiplying certain entries together from the original and orthogonal vectors. Refer to the above links for added information.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()

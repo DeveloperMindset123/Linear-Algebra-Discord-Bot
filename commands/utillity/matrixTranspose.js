@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const math = require("mathjs");
 const { execute } = require("./inviteCreate");
 
@@ -16,20 +16,39 @@ module.exports = {
 		),
 
 	execute: async function (interaction) {
+		await interaction.deferReply({
+			ephemeral: false,
+		});
 		try {
-			await interaction.deferReply({
-				ephemeral: true,
-			});
-
 			const originalMatrix = interaction.options.get("matrix");
 			const matrixToTranspose = math.matrix(JSON.parse(originalMatrix.value));
 			const transposeMatrix = math.transpose(matrixToTranspose);
-
-			console.log(
-				`The original matrix was ${originalMatrix.value} and the resulting transpose matrix was ${transposeMatrix}`
-			);
-			await interaction.editReply({
-				content: `End of successful execution! Resulting matrix value being ${transposeMatrix}`,
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(`Resulting matrix value being ${transposeMatrix}`)
+				.addFields(
+					{
+						name: "Reference 1",
+						value: "https://www.cuemath.com/algebra/transpose-of-a-matrix/",
+					},
+					{
+						name: "Reference 2",
+						value: "https://byjus.com/maths/transpose-of-a-matrix/",
+					},
+					{
+						name: "Explanation",
+						value:
+							"The matrix transpose is calcualted by swapping the rows and column entries. Suppose the dimension of the original matrix was 2x3, the dimension of the transposed matrix will be 3x2 instead. Another interesting fact to note is that multiplying a non-square matrix by it's transpose results in an square matrix, this will be useful for calculating the approximation of x vector in the later chapters.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()

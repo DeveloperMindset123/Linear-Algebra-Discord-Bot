@@ -71,6 +71,6 @@ module.exports = {
 			.setDescription(`You creted this invite for: *${reason}*!`)
 			.setTimestamp()
 			.setFooter({ text: `Invite Generator` });
-		await interaction.reply({ embeds: [embed], ephemeral: false });
+		return await interaction.reply({ embeds: [embed], ephemeral: false });
 	},
 };

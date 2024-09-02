@@ -20,10 +20,10 @@ module.exports = {
 				.setRequired(true)
 		),
 	execute: async function (interaction) {
+		await interaction.deferReply({
+			ephemeral: false,
+		});
 		try {
-			await interaction.deferReply({
-				ephemeral: false,
-			});
 			const vector1 = math.matrix(
 				JSON.parse(await interaction.options.get("vector1").value)
 			);
@@ -45,9 +45,35 @@ module.exports = {
 				resultInRadians,
 				math.divide(180, math.pi)
 			);
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(
+					`Angle (in radians) ${resultInRadians} \n\n Angle (in Degrees) : ${resultInDegrees}`
+				)
+				.addFields(
+					{
+						name: "Reference 1",
+						value: "https://www.youtube.com/watch?v=jnx5RTthmsk",
+					},
+					{
+						name: "Reference 2",
+						value: "https://www.youtube.com/watch?v=TTom8n3FFCw&t=15s",
+					},
+					{
+						name: "Explanation",
+						value:
+							"The angle between two vectors can be calculated using the arccos formula alongside the combination of the dot product between two vectors. The above videos helps show how the formula can be applied, it is recommended that you review the unit circle for arccos and dot product formula, as well as the distance formula of vectors to help understand how this calculation has been done, alongside doing some practice questions from the textbook will suffice.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
 
-			await interaction.editReply({
-				content: `Successful exeuction of command!\n Angle (in radians) : ${resultInRadians} \n\n Angle (in degrees) : ${resultInDegrees}`,
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()

@@ -36,7 +36,6 @@ const gramSchmidt = async (vectorMatrix) => {
 			break;
 
 		case 3:
-			console.warn("Dimension 3 is executing...");
 			const orthogonalVector1of2 = math.subtract(
 				vectorMatrix._data[1],
 				math.multiply(
@@ -76,7 +75,6 @@ const gramSchmidt = async (vectorMatrix) => {
 			console.log(`The current unit vectors are ${orthonormalVectors}`);
 			break;
 		case 4:
-			console.warn("Switch statement for dimension 4 is executing...");
 			const orthogonalVector2of4 = math.subtract(
 				vectorMatrix._data[1],
 				math.multiply(
@@ -141,7 +139,6 @@ const gramSchmidt = async (vectorMatrix) => {
 			break;
 
 		case 5:
-			console.warn("Switch statement for dimension 5 is executing...");
 			const orthogonalVector2of5 = math.subtract(
 				vectorMatrix._data[1],
 				math.multiply(
@@ -271,9 +268,38 @@ module.exports = {
 
 			const orthogonalVectorArray = math.matrix(result._data[0]);
 			const orthonormalVecorsArray = math.matrix(result._data[1]);
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle("Successful execution of command")
+				.setDescription(
+					`Orthogonal Vectors : ${orthogonalVectorArray} \n\n Orthonormal Vectors : ${orthonormalVecorsArray}`
+				)
+				.addFields(
+					// TODO : Modify here as needed
+					{
+						name: "Reference 1",
+						value: "https://www.youtube.com/watch?v=MIRHxroPwBM",
+					},
+					{
+						name: "Reference 2",
+						value:
+							"https://calcworkshop.com/orthogonality/the-gram-schmidt-process-and-qr-factorization/",
+					},
+					{
+						name: "Explanation",
+						value:
+							"In simple terms, gram-schmidt is a technique/formula (formula depends on the number of vectors we are working with), that can be used to make non-orthogonal vectors orthogonal to one another. To test if vectors are orthogonal, you can take one vector and multiply it by every other vector and see if the dot product is 0. Another observation to notice is that vector multiplications are nothing but calculation of the dot products, and matrix multiplication is the multiplication of several vectors. To calculate the orhonormal vectors, you simply convert the newly created orthogonal vectors that you found using Gram-Schmidt process into an unit vector, to test if the unit vector is correct, test it by taking the distance and see if the resulting value is 1, you can also check and see if the unit vector is orthogonal by multiplying it to the other vectors and determine if the resulting dot product is 0 or not.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
 
 			await interaction.editReply({
-				content: `Successful execution of command!\n Orthogonal Vectors : ${orthogonalVectorArray} \n\n Orthonormal Vectors : ${orthonormalVecorsArray}`,
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()

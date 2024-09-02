@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const math = require("mathjs");
 
 module.exports = {
@@ -26,25 +26,54 @@ module.exports = {
 				.setRequired(true)
 		),
 	execute: async function (interaction) {
+		await interaction.deferReply({
+			ephemeral: false,
+		});
 		try {
-			await interaction.deferReply({
-				ephemeral: true,
-			});
-			await interaction.editReply({
-				content: `The coordinates that corresponds to the vector ${math.matrix(
-					JSON.parse(await interaction.options.get("x-vector").value)
-				)} is ${math.multiply(
-					math.matrix(
-						JSON.parse(
-							await interaction.options.get("basis-vector-matrix").value
-						)
-					),
-					math.matrix(
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(
+					`The coordinates that corresponds to the vector ${math.matrix(
+						JSON.parse(await interaction.options.get("x-vector").value)
+					)} is ${math.multiply(
 						math.matrix(
-							JSON.parse(await interaction.options.get("x-vector").value)
+							JSON.parse(
+								await interaction.options.get("basis-vector-matrix").value
+							)
+						),
+						math.matrix(
+							math.matrix(
+								JSON.parse(await interaction.options.get("x-vector").value)
+							)
 						)
-					)
-				)}`,
+					)}`
+				)
+				.addFields(
+					// TODO : Modify here as needed
+					{
+						name: "Reference 1",
+						value:
+							"https://math.libretexts.org/Bookshelves/Linear_Algebra/Interactive_Linear_Algebra_(Margalit_and_Rabinoff)/02%3A_Systems_of_Linear_Equations-_Geometry/2.8%3A_Bases_as_Coordinate_Systems",
+					},
+					{
+						name: "Reference 2",
+						value:
+							"https://www.google.com/search?q=calculating+the+coordinates+of+a+vector&oq=calculating+the+coordinates+of+a+vector&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDY3NjJqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8#fpstate=ive&vld=cid:468f2861,vid:ghM8ZBaWGWg,st:0",
+					},
+					{
+						name: "Explanation",
+						value:
+							"One trick to calculate the coordinates of a vector is using the formula. vector-x=matrix-S * coordinate-vector-x, and this can be rewritten in terms of the coordiante vector x, as coordinate-vector-x=matrix-S-inverse * vector-x. Here matrix S is composed of the basis vectors and x is the resulting vector of the linear combination of the basis vectors. The original equation can also be used to calculate vector-x given the coordinate vector and the basis vector for a subsequent command.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()

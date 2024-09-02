@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const math = require("mathjs");
 
 // TODO : Remove the excess comments later, the excess comments should not make to the main branch
@@ -27,32 +27,43 @@ module.exports = {
 
 	// define the execution function
 	execute: async function (interaction) {
+		await interaction.deferReply({ ephemeral: false });
 		try {
-			// we want to modify the response prior to execution, and allow for longer than the 3 seconds default execution timing
-			// having the ephemeral option set to true ensures that only we can see the message popup
-			await interaction.deferReply({ ephemeral: true });
-
-			// don't get mixed up with option and options
-			// @Reference https://discord.js.org/docs/packages/discord.js/14.14.1/CommandInteraction:Class --> this is the interaction parameter's type that is actually being inferred under the hood.
-			const matrix1 = interaction.options.get("matrix1");
-			const matrix2 = interaction.options.get("matrix2");
-
-			// retrieve the values from the returned object that we get from the user's input so we can pass in the string into the math.matrix() function as a parameter so that we can perform the relevant matrix arithemtic
+			const matrix1 = await interaction.options.get("matrix1");
+			const matrix2 = await interaction.options.get("matrix2");
 			const matrix1Converted = math.matrix(JSON.parse(matrix1.value));
 			const matrix2Converted = math.matrix(JSON.parse(matrix2.value));
-
-			// subtract the matrix from one another
 			const subtractedMatrix = math.subtract(
 				matrix1Converted,
 				matrix2Converted
 			);
-
-			console.log(
-				`The values of the matrix are ${matrix1.value} and ${matrix2.value} and the resulting subtracted matrix is ${subtractedMatrix}`
-			);
-			// print out the resulting matrix and provide a response in the command execution
-			await interaction.editReply({
-				content: `End of successful execution! Resulting matrix value being ${subtractedMatrix}`,
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(`Resulting matrix value being ${subtractedMatrix}`)
+				.addFields(
+					{
+						name: "Reference 1",
+						value: "https://www.youtube.com/watch?v=QXUbFzEd3Ww",
+					},
+					{
+						name: "Reference 2",
+						value:
+							"https://www.varsitytutors.com/hotmath/hotmath_help/topics/adding-and-subtracting-matrices",
+					},
+					{
+						name: "Explanation",
+						value:
+							"There is not much to be said about matrix subtraction, simply take each of the entries and add it to the corresponding entries of the other matrix, the same rule applies for subtractions.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()

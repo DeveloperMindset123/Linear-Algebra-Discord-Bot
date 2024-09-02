@@ -11,7 +11,7 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			const minimalCorrectEmbedBuilder = new EmbedBuilder()
-				.setColor(0x00ff00)
+				.setColor("#00FF00")
 				.setTitle(
 					`The server is ${interaction.guild.name} and has ${interaction.guild.memberCount} members`
 				)

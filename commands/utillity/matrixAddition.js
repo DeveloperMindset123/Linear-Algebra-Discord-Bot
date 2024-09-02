@@ -31,29 +31,42 @@ module.exports = {
 				.setRequired(true)
 		),
 	execute: async function (interaction) {
+		await interaction.deferReply({ ephemeral: false });
 		try {
-			await interaction.deferReply({ ephemeral: true });
-			// TODO : It's functional, but requires some cleanup, also the resulting reply should be an embedding instead
-			// TODO : Provide steps for how matrix addition is done, as well as reference links for people to look into for an in-depth explanation, simplest thing would be to provide an explanation and link reference links to show how the calculations are done in an official website
-
 			const matrix1 = interaction.options.get("matrix1");
 			const matrix2 = interaction.options.get("matrix2");
 			const matrix1Converted = math.matrix(JSON.parse(matrix1.value));
 			const matrix2Converted = math.matrix(JSON.parse(matrix2.value));
 			const addedMatrix = math.add(matrix1Converted, matrix2Converted);
 
-			console.log(
-				`The values are ${matrix1.value} and ${matrix2.value} and the resulting addition is ${addedMatrix}`
-			);
-			console.log(
-				`The types for the math converted matrix is ${typeof matrix1.value} and ${typeof matrix2.value}`
-			);
-			// NOTE : the properties of the object are the following --> "_name", "_type", "_value"
-			await interaction.editReply({
-				content: `End of successful execution! Resulting matrix value being ${addedMatrix}`,
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(`Resulting matrix value being ${addedMatrix}`)
+				.addFields(
+					{
+						name: "Reference 1",
+						value: "https://www.youtube.com/watch?v=QXUbFzEd3Ww",
+					},
+					{
+						name: "Reference 2",
+						value:
+							"https://www.varsitytutors.com/hotmath/hotmath_help/topics/adding-and-subtracting-matrices",
+					},
+					{
+						name: "Explanation",
+						value:
+							"There is not much to be said about matrix additions, simply take each of the entries and add it to the corresponding entries of the other matrix, the same rule applies for subtractions.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
-			// end the code ex
-			return;
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()
 				.setColor("#FF0000")
@@ -78,7 +91,6 @@ module.exports = {
 						value: "There was an error executing this command",
 					},
 					{
-						// this object creates an empty whitespace
 						name: "\u200B",
 						value: "\u200B",
 					},

@@ -11,7 +11,7 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			const minimalCorrectEmbedBuilder = new EmbedBuilder()
-				.setColor(0x00ff00)
+				.setColor("#00FF00")
 				.setTitle(
 					`This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}`
 				)

@@ -38,11 +38,34 @@ module.exports = {
 			eigenValues.forEach((currElement) => {
 				singularValues.push(math.sqrt(currElement));
 			});
-
-			await interaction.editReply({
-				content: `Successful execution of command!\n The diagonalized matrix is ${math.matrix(
-					singularValues
-				)}`,
+			const customCorrectEmbed = new EmbedBuilder()
+				.setColor("#00FF00")
+				.setTitle(`The diagonalized matrix is ${math.matrix(singularValues)}`)
+				.addFields(
+					// TODO : Modify here as needed
+					{
+						name: "Reference 1",
+						value: "https://www.youtube.com/watch?v=4zpkXxAUHcE",
+					},
+					{
+						name: "Reference 2",
+						value:
+							"https://math.libretexts.org/Bookshelves/Linear_Algebra/Understanding_Linear_Algebra_(Austin)/07%3A_The_Spectral_Theorem_and_singular_value_decompositions/7.04%3A_Singular_Value_Decompositions",
+					},
+					{
+						name: "Explanation",
+						value:
+							"In Simple terms, singular values are the square rooted values of the eigenvalues, by knowing how to derive eigenvalues, you can easily determine singular values with the additional step of calculating the square root of the eigenvalues. The diagonal matrix using singular values MUST be contructed in ascedning order. Please refer to the links above for additional information.",
+					}
+				)
+				.setTimestamp()
+				.setAuthor({
+					name: "Ayan Das",
+					iconURL: "https://avatars.githubusercontent.com/u/109440738?v=4",
+					url: "https://github.com/DeveloperMindset123",
+				});
+			return await interaction.editReply({
+				embeds: [customCorrectEmbed],
 			});
 		} catch (error) {
 			const customErrorEmbed = new EmbedBuilder()
