@@ -18,11 +18,10 @@ module.exports = {
 
 	execute: async function (interaction) {
 		await interaction.deferReply({
-			ephemeral: true,
+			ephemeral: false,
 		});
 
 		try {
-			// ! Reference --> https://sumantmath.wordpress.com/2021/08/20/singular-value-decomposition-rectangular-matrix/
 			let userMatrix = math.matrix(
 				JSON.parse(await interaction.options.get("matrix").value)
 			);
@@ -46,10 +45,9 @@ module.exports = {
 				)}`,
 			});
 		} catch (error) {
-			// add the error embed here
 			const customErrorEmbed = new EmbedBuilder()
-				.setColor(0xff000)
-				.setTitle("Err (Click here for Reference Material)")
+				.setColor("#FF0000")
+				.setTitle("Error (Click here for Reference Material)")
 				.setURL("https://www.youtube.com/watch?v=4zpkXxAUHcE")
 				.setAuthor({
 					name: "Ayan Das",
@@ -90,17 +88,11 @@ module.exports = {
 				.setTimestamp()
 				.setFooter({
 					text: `Command failed to execute due to ${error}`,
-					iconURL: "",
+					// ! This was where the error message was coming from, accidentally left it empty earlier
+					iconURL:
+						"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWru8q17zpOzzzT1s475ZS_8fOL1GS0teSw&s",
 				});
-			console.error(error);
-			await interaction.editReply({
-				content: `There was an error in executing this command.`,
-				iconURL:
-					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWru8q17zpOzzzT1s475ZS_8fOL1GS0teSw&s",
-			});
-
-			console.error(error);
-			await interaction.editReply({
+			return await interaction.editReply({
 				embeds: [customErrorEmbed],
 			});
 		}

@@ -7,7 +7,7 @@ const gramSchmidt = async (vectorMatrix) => {
 
 	let orthonormalVectors = [];
 	const dimension = vectorMatrix._size[0];
-	//const matrixDimension = vectorMatrix._size;
+
 	const unitVector1 = math.matrix(
 		math.multiply(
 			1 / math.sqrt(math.dot(vectorMatrix._data[0], vectorMatrix._data[0])),
@@ -52,11 +52,6 @@ const gramSchmidt = async (vectorMatrix) => {
 			);
 
 			orthonormalVectors.push(unitVector2of3);
-			/**
-			 * @NOTE Formula (For 3 vectors) --> x - ( ((u1 * x) * u1) + ((u2 * x) * u2)) )
-			 * @Reference https://www.khanacademy.org/math/linear-algebra/alternate-bases/orthonormal-basis/v/linear-algebra-gram-schmidt-example-with-3-basis-vectors --> Link to explain how gram-schmidt can be calculated for 3 or more vectors in detail
-			 * @Explanation The reason my answer was incorrect was due to not implementing the formula correctly initially
-			 */
 			const orthogonalVector3Part1 = math.add(
 				math.multiply(
 					math.multiply(unitVector1, vectorMatrix._data[2]),
@@ -268,7 +263,6 @@ module.exports = {
 				ephemeral: false,
 			});
 
-			// ? The following are the returned keys if Object.keys(inputMatrixArray) is used --> _data,_size,_datatype --> we are interested in data and _size only --> addiitonally, data doesn't allow for object return type
 			const input = math.matrix(
 				JSON.parse(await interaction.options.get("vector-matrix").value)
 			);
@@ -282,11 +276,8 @@ module.exports = {
 				content: `Successful execution of command!\n Orthogonal Vectors : ${orthogonalVectorArray} \n\n Orthonormal Vectors : ${orthonormalVecorsArray}`,
 			});
 		} catch (error) {
-			// ! This command only takes in one input, the matrix consisiting of the non-orthogonal vectors
-			// ! Embeds can also be defined in the form of an embed object
-			// ** Reference  : https://discordjs.guide/popular-topics/embeds.html#using-the-embed-constructor
 			const customErrorEmbed = new EmbedBuilder()
-				.setColor(0xff000)
+				.setColor("#FF0000")
 				.setTitle("Error (Click here for the original reference material)")
 				.setURL("https://www.youtube.com/watch?v=MIRHxroPwBM")
 				.setAuthor({
@@ -301,25 +292,17 @@ module.exports = {
 					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWru8q17zpOzzzT1s475ZS_8fOL1GS0teSw&s"
 				)
 				.addFields(
-					// this field is to provide a response stating that the command failed to execute
-					// the objects must always contain the name and value
 					{
-						// single line error message, generic message, copy/paste example seen everywhere else as well
 						name: "Error Message",
 						value: "There was an error executing this command",
 					},
 					{
-						// this object creates an empty whitespace
 						name: "\u200B",
 						value: "\u200B",
 					},
-					// the following two fields are concerned with providing hints
-					// these hints intended to be provided in a column view for easier readabillity
-					// 2 hints is sufficient
 					{
 						name: "Check your input",
 						value: "2D array, with each vectors represented as 1D arrays",
-						// this ensures that the provided hints are in column format within a single row
 						inline: true,
 					},
 					{
@@ -338,13 +321,9 @@ module.exports = {
 					text: `Command failed to execute due to ${error}`,
 					iconURL:
 						"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmWru8q17zpOzzzT1s475ZS_8fOL1GS0teSw&s",
-					// no URL need to be provided since this shouldn't redirect the user anywhere else
 				});
 
-			// TODO : General reminder for future commands as this file will be referenced for remaining embed definitions
-			// TODO : make sure to add the newly created embed onto the editReply object section, with the "embeds" being the key and the value encased in [], with the entry being the embedding value itself
-			console.error(error);
-			await interaction.editReply({
+			return await interaction.editReply({
 				embeds: [customErrorEmbed],
 			});
 		}
