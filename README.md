@@ -12,22 +12,19 @@
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
     <!--add the link to the image here-->
-    <img src="https://postimg.cc/VdPJZkGh" alt="Logo" width="80" height="80">
+    <img src="github-image-readme.jpg" alt="Logo" width="200" height="200">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">Linear Algebra Discord Bot</h3>
 
   <p align="center">
-    project_description
+    A discord bot capable of performing calculations ranging from Matrix arithemtics to Singular Value Decomposition. Topics covered are the topics that a student would see taking Linear Algebra as an undergraduate course. Although majority of the calculations was implemented using MathJs's API to simplify the mathematical implementation, some commands required direct mathematical logic from scaratch. Additionally implemented explanations and reference links upon both success/failure of command execution as well as logic for how to properly handle unsuccessful command execution.
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+  <a href="https://discord.com/oauth2/authorize?client_id=1256271496955822112">Check It Out</a><br />
+    <p>Following Are Links for Contact, to report Bugs and if you would like a new feature:</p>
+    <a href="dasa60196@gmail.com">Email</a>
+    <a href="the1sand0s">Discord Username</a>
+    
   </p>
 </div>
 
