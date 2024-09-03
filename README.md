@@ -42,7 +42,7 @@ If you would like to locally run the project, please follow the instructions bel
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+Ensure that npm's version is up to date (NOTE : Your not limited to npm only).
 * npm 
   ```sh
   npm install npm@latest -g 
