@@ -26,7 +26,6 @@
 * ![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)
 * ![Yarn](https://img.shields.io/badge/yarn-%232C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white)
 * ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-* ![NixOS](https://img.shields.io/badge/NIXOS-5277C3.svg?style=for-the-badge&logo=NixOS&logoColor=white)
 * ![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)
 * ![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
 * ![Google Cloud](https://img.shields.io/badge/GoogleCloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white)
@@ -83,7 +82,7 @@ Ensure that npm's version is up to date (NOTE : Your not limited to npm only).
 ## Example Of How To Use Commands
 <!--TODO : Add instructions for how to execute various commands here in the form of gifs using Kap-->
 <!-- ROADMAP -->
-<p><b>HINT:</b> Matrix should be represented using 2D arrays for the input (such as <i><b>[[8-4,7],[4,6,9],[3,-2,-8]]</b></i>, and vectors should be represented using 1d arrays, such as <i><b>[2,1,-2]</b></i>). Additionally, if you have multiple vectors, form a matrix using them if the command takes a matrix, such as gram-schmidt and then write them in 2D array format, the calculation will work, apologies for the inconvenience, this was the best solution I could think of given the time-constraint.</p>
+<p><b>HINT:</b> Matrix should be represented using 2D arrays for the input (such as <i><b>[[8-4,7],[4,6,9],[3,-2,-8]]</b></i>, and vectors should be represented using 1d arrays, such as <i><b>[2,1,-2]</b></i>). Each vectors should be represented within the 2D array as a 1D array when speciyfing the matrix, apologies for the inconvenience as that is the most straightforward way I could think of for user inputs to execute the commands as needed.</p>
 <p><b>HINT:</b></p> If command fails to execute, there's also a link to the original reference, I have also provided instruction on the embeddings for what to do in the instance that command were to fail.
 
 
@@ -106,12 +105,17 @@ Ensure that npm's version is up to date (NOTE : Your not limited to npm only).
 
 ## Future Integrations
 - [ ] Write tests for all commands to handle all unforseen edge cases using Jest
+- [ ] Floating/Double/Decimal variables converted to equal fraction counterparts.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+<h3> Below are demos of few of the commands to get a general idea of how they can be used:</h3>
 
 https://github.com/user-attachments/assets/8f071d4c-c317-4fc4-817c-4bfe81780523
 
+https://github.com/user-attachments/assets/112144a6-d62b-4fd9-a991-309879497e7f
 
+https://github.com/user-attachments/assets/936685e2-5cb1-4d41-8915-514358e92f82
+
+https://github.com/user-attachments/assets/b5e74948-1a0a-4912-8b4a-21ca0a0174b1
 
 
 <!-- CONTRIBUTING -->
