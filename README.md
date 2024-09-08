@@ -83,7 +83,7 @@ Ensure that npm's version is up to date (NOTE : Your not limited to npm only).
 ## Example Of How To Use Commands
 <!--TODO : Add instructions for how to execute various commands here in the form of gifs using Kap-->
 <!-- ROADMAP -->
-<p><b>HINT:</b> Matrix should be represented using 2D arrays for the input (such as <i><b>[[8-4,7],[4,6,9],[3,-2,-8]]</b></i>, and vectors should be represented using 1d arrays, such as <i><b>[2,1,-2]</b></i>)</p>
+<p><b>HINT:</b> Matrix should be represented using 2D arrays for the input (such as <i><b>[[8-4,7],[4,6,9],[3,-2,-8]]</b></i>, and vectors should be represented using 1d arrays, such as <i><b>[2,1,-2]</b></i>). Additionally, if you have multiple vectors, form a matrix using them if the command takes a matrix, such as gram-schmidt and then write them in 2D array format, the calculation will work, apologies for the inconvenience, this was the best solution I could think of given the time-constraint.</p>
 <p><b>HINT:</b></p> If command fails to execute, there's also a link to the original reference, I have also provided instruction on the embeddings for what to do in the instance that command were to fail.
 
 
