@@ -83,6 +83,10 @@ Ensure that npm's version is up to date (NOTE : Your not limited to npm only).
 ## Example Of How To Use Commands
 <!--TODO : Add instructions for how to execute various commands here in the form of gifs using Kap-->
 <!-- ROADMAP -->
+<p><b>HINT:</b> Matrix should be represented using 2D arrays for the input (such as <i><b>[[8-4,7],[4,6,9],[3,-2,-8]]</b></i>, and vectors should be represented using 1d arrays, such as <i><b>[2,1,-2]</b></i>)</p>
+<p><b>HINT:</b></p> If command fails to execute, there's also a link to the original reference, I have also provided instruction on the embeddings for what to do in the instance that command were to fail.
+
+
 ## Roadmap
 
 - [x] Matrix Addition/Subtraction
@@ -100,7 +104,13 @@ Ensure that npm's version is up to date (NOTE : Your not limited to npm only).
 - [x] QR Decomposition and SVD Decomposition
 - [x] Deployed on Google Cloud's VM instance for 24/7 Access on-demand
 
+## Future Integrations
+- [ ] Write tests for all commands to handle all unforseen edge cases using Jest
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+https://github.com/user-attachments/assets/8f071d4c-c317-4fc4-817c-4bfe81780523
+
 
 
 
