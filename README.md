@@ -52,7 +52,7 @@ Ensure that npm's version is up to date (NOTE : Your not limited to npm only).
 1. Setup your bot and retrieve it's token following the guide and add the server to a server for testing [Setup Instructions](https://discordjs.guide/preparations/setting-up-a-bot-application.html)
 2. Clone the repo
    ```sh
-   [git clone https://github.com/github_username/repo_name.git](https://github.com/DeveloperMindset123/Linear-Algebra-Discord-Bot.git)
+   https://github.com/DeveloperMindset123/Linear-Algebra-Discord-Bot.git
    ```
 3. Install the packages
    ```sh
